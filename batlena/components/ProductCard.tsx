@@ -1,17 +1,22 @@
+'use client'
+
+
 import Image from 'next/image'
 import {
   Avatar,
-  AvatarBadge,
   AvatarFallback,
   AvatarGroup,
   AvatarGroupCount,
   AvatarImage,
 } from "@/components/ui/avatar"
 import { Star } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 const ProductCard = () => {
+
+  const router = useRouter()
   return (
-    <div className="w-65 rounded-xl border bg-white shadow-sm overflow-hidden group">
+    <div className="w-65 rounded-xl border bg-white shadow-sm overflow-hidden group" role='button' onClick={()=>router.push('/details')}>
       {/* Image section */}
       <div className="relative h-45 bg-gray-100 group-hover:scale-105 cursor-pointer">
         <span className="absolute top-2 left-2 z-10 rounded-full bg-orange-600 px-3 py-1 text-xs font-semibold text-white">
