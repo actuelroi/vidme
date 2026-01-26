@@ -1,0 +1,33 @@
+/* styles/EditorPage.module.css */
+.editorContainer {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebar {
+  border-right: 1px solid #e5e7eb;
+  background: #fafafa;
+  overflow-y: auto;
+}
+
+.editorArea {
+  padding: 16px;
+  overflow: auto;
+  background: #ffffff;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .editorContainer {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+  
+  .sidebar {
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+    max-height: 300px;
+  }
+}
