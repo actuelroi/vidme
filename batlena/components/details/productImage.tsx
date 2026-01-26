@@ -37,7 +37,7 @@ const ProductImage = () => {
       </div>
 
       {/* Main Image */}
-      <div className="relative w-full md:w-127 h-75 md:h-127 order-1 md:order-2 border rounded-md">
+      <div className="relative w-full md:w-127 h-75 md:h-127 order-1 md:order-2 border rounded-md hover:scale-105 transition cursor-pointer">
         <Image
           src={activeImage}
           alt="Selected product image"
