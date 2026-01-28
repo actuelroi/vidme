@@ -66,34 +66,7 @@ const RightSideProduct = () => {
         <FaCartShopping size={22} />
       </button>
 
-      {/* Shipping */}
-      <div className="border-t pt-4 space-y-3 text-sm">
-        <div>
-          <p className="font-medium">Flat rate shipping</p>
-          <p className="text-gray-600">
-            €3.49 — Free over €10 <br />
-            Estimated delivery: Feb 6–20
-          </p>
-        </div>
-
-        <div>
-          <p className="font-medium">Ship to Store</p>
-          <p className="text-gray-600">
-            €0.99 <br />
-            Estimated delivery: Feb 24–Mar 1
-          </p>
-        </div>
-      </div>
-
-      {/* Description */}
-      <div className="border-t pt-4">
-        <h2 className="font-semibold mb-2">Product Description</h2>
-        <p className="text-sm text-gray-600 leading-relaxed">
-          Waterproof, windproof winter gloves designed for cycling, driving,
-          and outdoor activities. Touchscreen compatible and suitable for
-          temperatures down to -10°C.
-        </p>
-      </div>
+     
     </div>
   );
 };
