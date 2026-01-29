@@ -7,12 +7,14 @@ import NoAccessToCart from '@/components/product/NoAccessToCart'
 import PriceFormatter from '@/components/product/PriceFormatter';
 import QuantityButtons from '@/components/product/QuantityButtons';
 import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { urlFor } from '@/sanity/lib/image';
 import useCartStore from '@/store';
 import { useAuth } from '@clerk/nextjs';
 import { Heart, ShoppingBag, Trash } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -223,7 +225,50 @@ const page = () => {
                                         </div>
                                     </div>
                                 </div>
+                                {/* Order summary mobile view */}
+                                <div className="md:hidden fixed bottom-0 left-0 w-full bg-white pt-2 z-999">
+                                    <div className="bg-white p-4 rounded-lg border mx-4">
+                                        <h2 className="text-lg font-semibold mb-2">
+                                            Récapitulatif de commande
+                                        </h2>
+                                        <div className="space-y-2">
+                                           
+                                            <Separator />
+                                            <div className="flex justify-between font-semibold text-lg">
+                                                <span>Total</span>
+                                                <FormattedPrice
+                                                    amount={totalPrice}
+                                                    className="text-lg font-bold text-black"
+                                                />
+                                            </div>
+                                            <Button
+                                                onClick={handleCheckout}
+                                                disabled={loading}
+                                                className="w-full rounded-full font-semibold tracking-wide"
+                                                size="lg"
+                                            >
+                                                 {loading ? "Traitement en cours" : "Passer à la caisse"}
+                                            </Button>
+                                            <Link
+                                                href="/"
+                                                className="text-center text-sm text-darkColor hover:underline border border-darkColor/50 rounded-full flex items-center justify-center py-2 hover:bg-darkColor/5 hover:border-darkColor hoverEffect"
+                                            >
+                                                <Image
+                                                    src={'/paypalLogo.png'}
+                                                    className="w-20"
+                                                    width={100}
+                                                    height={100}
+                                                    alt="paypalLogo"
+                                                />
+                                                <span className="ml-2">Payer avec PayPal</span>
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+
+
+
                         </>) : (
                         <EmptyCart />
                     )}
