@@ -10,6 +10,7 @@ export interface CartItem {
   selectedColor?: string;
   selectedShoesSize?: string;
   basePrice: number;
+  qty?: number
 }
 
 interface CartState {
@@ -20,6 +21,8 @@ interface CartState {
     selectedSize?: string,
     selectedColor?: string,
     selectedShoesSize?: string,
+    qty?: number 
+   
    
   ) => void;
 
@@ -56,7 +59,7 @@ const useCartStore = create<CartState>()(
     (set, get) => ({
       items: [],
 
-      addItem: (product, selectedSize, selectedColor, selectedShoesSize) => {
+      addItem: (product, selectedSize, selectedColor, selectedShoesSize,qty=1) => {
         const basePrice = product?.price ?? 0;
 
         set((state) => {
@@ -72,7 +75,7 @@ const useCartStore = create<CartState>()(
             return {
               items: state.items.map((item) =>
                 item === existing
-                  ? { ...item, quantity: item.quantity + 1 }
+                  ? { ...item, quantity: item.quantity + qty }
                   : item
               ),
             };
@@ -83,7 +86,7 @@ const useCartStore = create<CartState>()(
               ...state.items,
               {
                 product,
-                quantity: 1,
+                quantity: qty,
                 selectedSize,
                 selectedColor,
                 selectedShoesSize,

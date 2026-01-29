@@ -19,9 +19,10 @@ interface Props {
     selectedSize?: string;
     selectedColor?: string;
     selectedShoesSize?: string;
+     quantity?: number;
 }
 
-const AddToCartButton = ({ product, className, selectedSize, selectedColor, selectedShoesSize }: Props) => {
+const AddToCartButton = ({ product, className, selectedSize, selectedColor, selectedShoesSize, quantity }: Props) => {
     const { addItem, getItemCount } = useCartStore();
     const [isClient, setIsClient] = useState(false);
 
@@ -43,7 +44,10 @@ const AddToCartButton = ({ product, className, selectedSize, selectedColor, sele
         return null;
     }
 
+
     const handleAddToCart = () => {
+        const minQty = product.minOrder ?? 1;
+
         // Check if size/color selection is required but not provided
         if ((product.sizes && product.sizes.length > 0) && !selectedSize) {
             toast.error('Failed, please select a size');
@@ -59,7 +63,13 @@ const AddToCartButton = ({ product, className, selectedSize, selectedColor, sele
             return;
         }
 
-        addItem(product, selectedSize, selectedColor, selectedShoesSize);
+        addItem(
+            product, 
+            selectedSize, 
+            selectedColor, 
+            selectedShoesSize,
+            quantity ?? minQty
+    );
         toast.success(`${product?.name?.substring(0, 12)}... ${'addedSuccess'}`);
     };
 

@@ -232,7 +232,7 @@ const page = () => {
                                             Récapitulatif de commande
                                         </h2>
                                         <div className="space-y-2">
-                                           
+
                                             <Separator />
                                             <div className="flex justify-between font-semibold text-lg">
                                                 <span>Total</span>
@@ -247,7 +247,7 @@ const page = () => {
                                                 className="w-full rounded-full font-semibold tracking-wide"
                                                 size="lg"
                                             >
-                                                 {loading ? "Traitement en cours" : "Passer à la caisse"}
+                                                {loading ? "Traitement en cours" : "Passer à la caisse"}
                                             </Button>
                                             <Link
                                                 href="/"

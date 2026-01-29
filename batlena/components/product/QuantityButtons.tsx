@@ -30,11 +30,16 @@ const QuantityButtons = ({
     return
   }
 
+  const minQty = product.minOrder ?? 1;
 
   const itemCount = getItemCount(product?._id, selectedSize, selectedColor,selectedShoesSize);
   const isOutOfStock = product?.stock === 0;
 
   const handleRemoveProduct = () => {
+    if (itemCount <= minQty) {
+    toast.error(`Minimum order quantity is ${minQty}`);
+    return;
+  }
     removeItem(product?._id, selectedSize, selectedColor,selectedShoesSize);
     if (itemCount > 1) {
       toast.success("Quantity Decreased successfully!");
@@ -61,7 +66,7 @@ const QuantityButtons = ({
         size="icon"
         className="w-6 h-6 cursor-pointer"
         onClick={handleRemoveProduct}
-        disabled={itemCount === 0 || isOutOfStock}
+         disabled={itemCount <= minQty || isOutOfStock}
       >
         <Minus />
       </Button>

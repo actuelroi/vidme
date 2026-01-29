@@ -94,6 +94,7 @@ const RightSideProduct = ({ product }: Props) => {
       <AddToCartButton 
       product={product}
       selectedColor={selectedColors[0]}
+       quantity={quantity}
       
       />
     </div>
