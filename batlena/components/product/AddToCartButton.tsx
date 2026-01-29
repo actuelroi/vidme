@@ -84,8 +84,6 @@ const AddToCartButton = ({ product, className, selectedSize, selectedColor, sele
                             amount={product?.price ? product.price * itemCount : 0}
                         />
                         </div>
-                        
-
                     </div>
                     {/* Add to cart */}
 

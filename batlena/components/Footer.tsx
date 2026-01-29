@@ -60,35 +60,34 @@ export const OurJourneySection: React.FC<JourneySectionProps> = ({
     </section>
   );
 };
-
 // Preview
 export default function Footer() {
   return (
     <OurJourneySection
       backgroundLeft="https://images.unsplash.com/photo-1549893074-0f15b44d53d0"
       backgroundRight="https://images.unsplash.com/photo-1520975916090-3105956dac38"
-      heading="Our Journey"
-      cta="Read Our Story"
+      heading="Notre engagement"
+      cta="Découvrir notre histoire"
       blocks={[
         {
-          label: "Our Concept",
+          label: "Notre concept",
           description:
-            "A well-edited collection of timeless, multipurpose pieces that are tried, tested and perfected. Crafted with love in small batches, with attention to the little details, full price transparency, and minimal impact on the environment.",
+            "Nous proposons une sélection rigoureuse de produits fiables, durables et polyvalents, conçus pour répondre aux besoins du quotidien. Notre objectif : offrir une qualité élevée à des prix accessibles, sans compromis sur l’essentiel.",
         },
         {
-          label: "Our Mission",
+          label: "Notre mission",
           description:
-            "Our mission is to redefine luxury fashion through a lens of ethical responsibility and functional elegance. We create meticulously designed handbags that are not only beautiful but also align with our unwavering commitment to cruelty-free practices and a transparent business model.",
+            "Notre mission est de rendre des produits de haute qualité accessibles au plus grand nombre à travers l’Europe. Grâce à une chaîne d’approvisionnement optimisée et transparente, nous réduisons les coûts inutiles afin de proposer le meilleur rapport qualité-prix à nos clients.",
         },
         {
-          label: "Our Materials",
+          label: "Nos matériaux & standards",
           description:
-            "We exclusively use ultrafiber, a premium non-woven fabric. It's plush, sustainable, easy to maintain, and lighter than animal leather.",
+            "Nous sélectionnons des matériaux résistants et performants, choisis pour leur durabilité, leur facilité d’entretien et leur excellent rapport qualité-prix. Chaque produit est testé pour répondre à des standards stricts de qualité.",
         },
         {
-          label: "Our People",
+          label: "Notre équipe",
           description:
-            "We're a small team supported by incredible freelancers, agencies, our manufacturing partners, and of course, the most amazing community. Thank you for making all of this possible.",
+            "Nous sommes une équipe européenne engagée, soutenue par des partenaires logistiques et industriels de confiance. Ensemble, nous travaillons chaque jour pour livrer rapidement des produits fiables et abordables à nos clients partout en Europe.",
         },
       ]}
     />
