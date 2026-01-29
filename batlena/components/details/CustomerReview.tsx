@@ -1,70 +1,50 @@
+"use client";
+
 import { Star } from "lucide-react";
+import { PRODUCT_BY_ID_QUERY_RESULT } from "@/sanity.types";
 
-const reviews = [
-  {
-    name: "Jean Dupont",
-    rating: 5,
-    feedback:
-      "Très bonne qualité ! Les gants sont chauds et fonctionnent bien avec l'écran tactile.",
-  },
-  {
-    name: "Sarah Martin",
-    rating: 4,
-    feedback:
-      "Confortables et légers. La livraison a été rapide, je recommande.",
-  },
-  {
-    name: "Lucas Bernard",
-    rating: 5,
-    feedback:
-      "Parfaits pour le vélo en hiver. Bonne prise en main et coupe-vent.",
-  },
-  {
-    name: "Emma Laurent",
-    rating: 3,
-    feedback:
-      "Corrects mais un peu fins pour les températures très froides.",
-  },
-  {
-    name: "Thomas Petit",
-    rating: 5,
-    feedback:
-      "Excellent rapport qualité/prix. Je vais en commander une autre paire.",
-  },
-];
+interface Props {
+  product: PRODUCT_BY_ID_QUERY_RESULT;
+}
 
-const CustomerReviews = () => {
+const CustomerReviews = ({ product }: Props) => {
+  if (!product?.reviews || product.reviews.length === 0) return null;
+
   return (
     <div className="mt-8 border rounded-lg p-6">
       <h2 className="text-xl font-semibold mb-4">Avis client</h2>
 
       <div className="space-y-5">
-        {reviews.map((review, index) => (
-          <div key={index} className="border-b pb-4 last:border-none">
-            {/* Name + Rating */}
-            <div className="flex items-center justify-between">
-              <p className="font-medium">{review.name}</p>
+        {product.reviews.map((review) => {
+          const name = review.name ?? "Client";
+          const rating = review.rating ?? 0;
+          const feedback = review.message ?? "";
 
-              <div className="flex">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`h-4 w-4 ${
-                      i < review.rating
-                        ? "fill-yellow-400 text-yellow-400"
-                        : "text-gray-300"
-                    }`}
-                  />
-                ))}
+          return (
+            <div key={review._key} className="border-b pb-4 last:border-none">
+              {/* Name + Rating */}
+              <div className="flex items-center justify-between">
+                <p className="font-medium">{name}</p>
+
+                <div className="flex">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`h-4 w-4 ${
+                        i < rating
+                          ? "fill-yellow-400 text-yellow-400"
+                          : "text-gray-300"
+                      }`}
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
 
-            {/* Feedback */}
-            <p className="text-sm text-gray-600 mt-2">
-              {review.feedback}
-            </p>
-          </div>
-        ))}
+              {/* Feedback */}
+              <p className="text-sm text-gray-600 mt-2">{feedback}</p>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

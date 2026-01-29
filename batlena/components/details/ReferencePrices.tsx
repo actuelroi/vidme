@@ -5,7 +5,12 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-const ReferencePrices = () => {
+
+interface Props{
+  merchantName?: string | null
+}
+
+const ReferencePrices = ({merchantName}:Props) => {
   return (
     <Accordion
       type="single"
@@ -21,7 +26,15 @@ const ReferencePrices = () => {
         <AccordionContent className="px-4 pb-4">
           <p className="text-lg text-gray-700 leading-relaxed">
             Un prix de référence est fourni par le vendeur de l&apos;article
-            (<span className="font-medium">lionkingandqueen</span>). Le
+            (
+              {
+                merchantName && 
+                <span className="font-medium">
+                {merchantName}
+                </span>
+              }
+              
+            ). Le
             pourcentage de réduction et les économies indiquées sont basés sur
             ce prix de référence.
           </p>

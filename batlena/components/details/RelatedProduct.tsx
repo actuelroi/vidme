@@ -1,24 +1,38 @@
 
-import ProductCard from '../ProductCard'
 
-const RelatedProduct = () => {
-  return (
-    <>
-    <div className='p-6 gap-5'>
- <h1 className='text-3xl font-bold p-4'>Related product</h1>
-    <div className='grid grid-cols-1 md:grid-cols-5  gap-4'>
-      <ProductCard/>
-      <ProductCard/>
-      <ProductCard/>
-      <ProductCard/>
-      <ProductCard/>
-      <ProductCard/>
-    </div>
-    </div>
-   
-    </>
-    
-  )
+
+import { getRelatedProducts } from "@/sanity/helpers";
+
+import ProductCard from "../ProductCard";
+
+
+
+interface Props {
+  categoryId?: string;
+  currentProductId: string;
 }
 
-export default RelatedProduct
+const RelatedProducts = async ({ categoryId, currentProductId }: Props) => {
+
+  if (!categoryId) return;
+
+  const data =  await getRelatedProducts(categoryId, currentProductId)
+  
+
+
+  return (
+    <div className="my-10">
+      <h2 className="text-2xl font-semibold mb-6">Produits similaires</h2>
+      <div className="grid grid-cols-2 gap-2 md:grid-cols-5 md:gap-4">
+        {data.map((product)=>(
+          <ProductCard 
+          key={product._id}
+          product={product}
+           />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default RelatedProducts;
