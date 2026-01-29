@@ -4,7 +4,7 @@ import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import emptyCart from "./../Images/emptyCart.png";
+
 
 
 export default function EmptyCart() {
@@ -31,7 +31,7 @@ export default function EmptyCart() {
           className="relative w-48 h-48 mx-auto"
         >
           <Image
-            src={emptyCart}
+            src={'/emptyCart.png'}
             alt="Panier d&apos;achat vide"
             layout="fill"
             objectFit="contain"

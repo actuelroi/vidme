@@ -3,6 +3,7 @@ import { Geist, Geist_Mono,Nunito } from "next/font/google";
 //@ts-ignore
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const font= Nunito({
   subsets: ["latin"]
@@ -21,6 +22,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+     <ClerkProvider>
+
     <html lang="en">
       <body
         className={`${font.className} antialiased`}
@@ -34,5 +37,6 @@ export default function RootLayout({
           </ThemeProvider>
       </body>
     </html>
+     </ClerkProvider>
   );
 }

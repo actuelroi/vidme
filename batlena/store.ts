@@ -47,6 +47,8 @@ interface CartState {
   ) => number;
 
   getTotalPrice: () => number;
+
+  getGroupedItems: () => CartItem[];
 }
 
 const useCartStore = create<CartState>()(
@@ -134,6 +136,30 @@ const useCartStore = create<CartState>()(
             item.selectedShoesSize === selectedShoesSize
         );
         return item?.quantity ?? 0;
+      },
+
+      getGroupedItems: () => {
+        const state = get();
+        const grouped: CartItem[] = [];
+
+        state.items.forEach(item => {
+          const existing = grouped.find(g =>
+            g.product?._id === item.product?._id &&
+            g.selectedSize === item.selectedSize &&
+            g.selectedColor === item.selectedColor &&
+            g.selectedShoesSize === item.selectedShoesSize
+          );
+
+          if (existing) {
+            existing.quantity += item.quantity;
+          } else {
+            grouped.push({
+              ...item
+            });
+          }
+        });
+
+        return grouped;
       },
 
       getTotalPrice: () =>
