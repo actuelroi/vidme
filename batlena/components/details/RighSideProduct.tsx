@@ -6,6 +6,7 @@ import { BsQuestion } from "react-icons/bs";
 import { FaCartShopping } from "react-icons/fa6";
 import { useState } from "react";
 import OptionSelector from "./OptionSelector";
+import AddToCartButton from "../product/AddToCartButton";
 
 interface Props {
   product: PRODUCT_BY_ID_QUERY_RESULT;
@@ -90,12 +91,11 @@ const RightSideProduct = ({ product }: Props) => {
         />
 
       </div>
-
-      {/* Add to cart */}
-      <button className="mt-2 flex items-center justify-center gap-3 bg-orange-500 hover:bg-orange-600 transition text-white py-3 rounded-md">
-        <span className="text-lg font-semibold">Add to cart</span>
-        <FaCartShopping size={22} />
-      </button>
+      <AddToCartButton 
+      product={product}
+      selectedColor={selectedColors[0]}
+      
+      />
     </div>
   );
 };

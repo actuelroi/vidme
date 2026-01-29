@@ -2,7 +2,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 interface OptionSelectorProps {
   label: string;
-  options: string[];
+  options: string[] ;
   value: string[];
   onChange: (v: string[]) => void;
   multiple?: boolean;

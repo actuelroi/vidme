@@ -5,9 +5,7 @@ import { ShopByCategory } from '@/components/ShopByCategory'
 
 
 
-const page = async () => {
-
- 
+const page = () => {
 
   return (
    <>

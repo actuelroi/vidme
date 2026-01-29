@@ -7,6 +7,7 @@ import RelatedProduct from "@/components/details/RelatedProduct";
 import RightSideProduct from "@/components/details/RighSideProduct";
 import ShipWithConfidence from "@/components/details/ShipWithConfidence";
 import { getProductBySlug } from "@/sanity/helpers";
+import { Suspense } from "react";
 
 interface Props {
   params: Promise<
@@ -24,6 +25,8 @@ const page = async ({ params }: Props) => {
 
 
   return (
+    <Suspense fallback={<div>Loading products…</div>}>
+  
     <div className='flex flex-col p-6'>
       <div className='flex flex-col md:flex-row p-6 w-full gap-4'>
         <ProductImage
@@ -44,10 +47,10 @@ const page = async ({ params }: Props) => {
         />
         <CustomerReviews
           product={data}
-        />
+          />
         <ReferencePrices
           merchantName={data?.vendor?.name}
-        />
+          />
 
       </div>
       <RelatedProducts
@@ -56,6 +59,7 @@ const page = async ({ params }: Props) => {
       />
 
     </div>
+        </Suspense>
   )
 }
 
