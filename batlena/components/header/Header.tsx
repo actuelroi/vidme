@@ -62,14 +62,14 @@ const Header = () => {
 
     return (
         <header className='sticky top-0 left-0 bg-white dark:bg-gray-900  border-gray-200 dark:border-gray-700 z-50 border-b'>
-            <nav className='flex items-center justify-between py-4   px-4'>
+            <nav className='flex items-center justify-between py-4 gap-2  px-4'>
                 <Logo />
                 <SearchBar />
                 <Button className='md:hidden' variant={'outline'} onClick={() => setIsOpen(true)}>
                     <Menu size={18} />
                 </Button>
 
-                <div className='hidden md:flex md: gap-4 items-center'>
+                <div className='hidden md:flex md:gap-4 items-center'>
                     <Bell size={20} className='cursor-pointer' />
                     <Heart size={20} className='md:mx-4 cursor-pointer' />
                     <GetTheApp />
