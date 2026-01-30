@@ -13,6 +13,25 @@
  */
 
 // Source: schema.json
+export type User = {
+  _id: string;
+  _type: "user";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  clerkUserId?: string;
+  name?: string;
+  email?: string;
+  favorites?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "product";
+  }>;
+  createdAt?: string;
+};
+
 export type Order = {
   _id: string;
   _type: "order";
@@ -175,6 +194,7 @@ export type Product = {
   status?: "best" | "hot" | "new";
   shoeSizes?: Array<string>;
   sizes?: Array<string>;
+  taille?: Array<string>;
   colors?: Array<string>;
   reviews?: Array<{
     name?: string;
@@ -327,6 +347,7 @@ export type Geopoint = {
 };
 
 export type AllSanitySchemaTypes =
+  | User
   | Order
   | Category
   | SanityImageCrop
@@ -430,6 +451,7 @@ export type PRODUCTS_QUERY_RESULT = Array<{
   status?: "best" | "hot" | "new";
   shoeSizes?: Array<string>;
   sizes?: Array<string>;
+  taille?: Array<string>;
   colors?: Array<string>;
   reviews?: Array<{
     name?: string;
@@ -530,6 +552,7 @@ export type PRODUCT_SEARCH_QUERY_RESULT = Array<{
   status?: "best" | "hot" | "new";
   shoeSizes?: Array<string>;
   sizes?: Array<string>;
+  taille?: Array<string>;
   colors?: Array<string>;
   reviews?: Array<{
     name?: string;
@@ -645,6 +668,7 @@ export type PRODUCT_BY_ID_QUERY_RESULT = {
   status?: "best" | "hot" | "new";
   shoeSizes?: Array<string>;
   sizes?: Array<string>;
+  taille?: Array<string>;
   colors?: Array<string>;
   reviews?: Array<{
     name?: string;
@@ -756,6 +780,7 @@ export type PRODUCT_BY_CATEGORY_QUERY_RESULT = Array<{
   status?: "best" | "hot" | "new";
   shoeSizes?: Array<string>;
   sizes?: Array<string>;
+  taille?: Array<string>;
   colors?: Array<string>;
   reviews?: Array<{
     name?: string;
@@ -932,6 +957,7 @@ export type RELATED_PRODUCTS_QUERY_RESULT = Array<{
   status?: "best" | "hot" | "new";
   shoeSizes?: Array<string>;
   sizes?: Array<string>;
+  taille?: Array<string>;
   colors?: Array<string>;
   reviews?: Array<{
     name?: string;

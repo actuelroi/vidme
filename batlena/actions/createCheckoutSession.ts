@@ -38,6 +38,8 @@ export async function createCheckoutSession(
                 variants.push(`Size: ${item.selectedShoesSize}`);
             if (item.selectedColor)
                 variants.push(`Color: ${item.selectedColor}`);
+            if (item.selectedTaille)
+                variants.push(`Color: ${item.selectedTaille}`);
 
             if (variants.length) {
                 name += ` (${variants.join(", ")})`;
@@ -57,6 +59,7 @@ export async function createCheckoutSession(
                             productId: item.product?._id ?? "",
                             selectedSize: item.selectedSize ?? "",
                             selectedColor: item.selectedColor ?? "",
+                            selectedTaille: item.selectedTaille ?? "",
                             selectedShoesSize: item.selectedShoesSize ?? "",
                         },
                     },

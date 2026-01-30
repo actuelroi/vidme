@@ -31,8 +31,8 @@ const ProductCard = ({ product }: Props) => {
 
 
   const router = useRouter()
-  
-    if (!product) return null
+
+  if (!product) return null
 
 
   const colorCount = countOptions(product.colors)
@@ -71,7 +71,7 @@ const ProductCard = ({ product }: Props) => {
           {sizeCount > 0 && `${sizeCount} sizes`}
         </p>
 
-        <h3 className="mt-1 text-base font-semibold leading-snug">
+        <h3 className="mt-1 text-base font-semibold leading-snug truncate">
           {product?.name}
         </h3>
 
@@ -90,17 +90,19 @@ const ProductCard = ({ product }: Props) => {
           <h1 className="mt-2 text-lg font-bold">€{product?.price}</h1>
           <AvatarGroup className="grayscale">
             <div className="flex items-center gap-2">
-              {product.vendor?.image && (
+              
                 <Avatar className="grayscale">
+                  {product.vendor?.image ? (
                   <AvatarImage
                     src={urlFor(product.vendor.image).width(40).height(40).url()}
                     alt={product.vendor.name || 'product-vendor-image'}
                   />
+                  ): (
                   <AvatarFallback>
-                    {product.vendor.name?.charAt(0)}
+                    {product.vendor?.name?.charAt(0)}
                   </AvatarFallback>
-                </Avatar>
               )}
+              </Avatar>
             </div>
             <AvatarGroupCount>+3</AvatarGroupCount>
           </AvatarGroup>

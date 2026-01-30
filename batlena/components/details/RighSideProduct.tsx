@@ -3,7 +3,7 @@
 import { PRODUCT_BY_ID_QUERY_RESULT } from "@/sanity.types";
 import { Star } from "lucide-react";
 import { BsQuestion } from "react-icons/bs";
-import { FaCartShopping } from "react-icons/fa6";
+
 import { useState } from "react";
 import OptionSelector from "./OptionSelector";
 import AddToCartButton from "../product/AddToCartButton";
@@ -17,6 +17,7 @@ const RightSideProduct = ({ product }: Props) => {
    const minQty = product.minOrder ?? 1;
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
+  const [selectedTaille, setSelectedTaille] = useState<string[]>([]);
   const [quantity, setQuantity] = useState(minQty);
 
   return (
@@ -76,6 +77,17 @@ const RightSideProduct = ({ product }: Props) => {
             options={product.colors}
             value={selectedColors}
             onChange={setSelectedColors}
+            multiple
+          />
+        )}
+
+
+        {product.taille && (
+          <OptionSelector
+            label="Taille"
+            options={product.taille}
+            value={selectedTaille}
+            onChange={setSelectedTaille}
             multiple
           />
         )}

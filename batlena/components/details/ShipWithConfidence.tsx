@@ -48,8 +48,6 @@ interface Props {
 }
 
 const ShipWithConfidence = ({ image, merchantName, rating }: Props) => {
-  if (!image) return null;
-
   const vendorName = merchantName ?? "Unknown";
   const vendorInitials = vendorName
     .split(" ")
@@ -88,7 +86,7 @@ const ShipWithConfidence = ({ image, merchantName, rating }: Props) => {
 
   return (
     <div className="mt-8 rounded-lg border p-5 flex flex-col">
-      <h2 className="text-2xl font-bold mb-4">Achetez en toute confiance</h2>
+      <h2 className="md:text-2xl text-xl font-bold mb-4">Achetez en toute confiance</h2>
 
       <ul className="space-y-3 mt-4">
         <li className="flex items-center gap-3">

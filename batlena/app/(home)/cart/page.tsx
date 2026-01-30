@@ -77,8 +77,8 @@ const page = () => {
 
 
 
-    const handleDeleteProduct = (id: string, selectedSize?: string, selectedColor?: string, selectedShoesSize?: string) => {
-        deleteCartProduct(id, selectedSize, selectedColor, selectedShoesSize);
+    const handleDeleteProduct = (id: string, selectedSize?: string, selectedColor?: string,selectedTaille?:string, selectedShoesSize?: string) => {
+        deleteCartProduct(id, selectedSize, selectedColor, selectedShoesSize,selectedTaille);
         toast.success("Produit supprimé avec succès !");
     };
 
@@ -132,7 +132,7 @@ const page = () => {
                                 <div className="grid lg:grid-cols-3 md:gap-8">
                                     <div className="lg:col-span-2 rounded-lg">
                                         <div className="border bg-white rounded-md">
-                                            {groupedItems?.map(({ product, selectedSize, selectedColor, selectedShoesSize, quantity }, i) =>
+                                            {groupedItems?.map(({ product, selectedSize, selectedColor,selectedTaille, selectedShoesSize, quantity }, i) =>
                                                 <div
                                                     key={i}
                                                     className="border-b p-2.5 last:border-b-0 flex items-center justify-between gap-5"
@@ -179,6 +179,15 @@ const page = () => {
                                                                         Couleur:{" "}
                                                                         <span className="font-semibold">
                                                                             {selectedColor.charAt(0).toUpperCase() + selectedColor.slice(1)}
+                                                                        </span>
+                                                                    </p>
+                                                                )}
+
+                                                                {selectedTaille && (
+                                                                    <p className="text-sm capitalize">
+                                                                        Taille:{" "}
+                                                                        <span className="font-semibold">
+                                                                            {selectedTaille.charAt(0).toUpperCase() + selectedTaille.slice(1)}
                                                                         </span>
                                                                     </p>
                                                                 )}

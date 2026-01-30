@@ -18,11 +18,12 @@ interface Props {
     className?: string;
     selectedSize?: string;
     selectedColor?: string;
+    selectedTaille?: string;
     selectedShoesSize?: string;
      quantity?: number;
 }
 
-const AddToCartButton = ({ product, className, selectedSize, selectedColor, selectedShoesSize, quantity }: Props) => {
+const AddToCartButton = ({ product, className, selectedSize, selectedColor, selectedTaille,selectedShoesSize, quantity }: Props) => {
     const { addItem, getItemCount } = useCartStore();
     const [isClient, setIsClient] = useState(false);
 
@@ -33,7 +34,7 @@ const AddToCartButton = ({ product, className, selectedSize, selectedColor, sele
 
 
 
-    const itemCount = getItemCount(product._id, selectedSize, selectedColor, selectedShoesSize);
+    const itemCount = getItemCount(product._id, selectedSize, selectedColor,selectedTaille, selectedShoesSize);
     const isOutOfStock = product?.stock === 0;
 
     useEffect(() => {
@@ -58,6 +59,14 @@ const AddToCartButton = ({ product, className, selectedSize, selectedColor, sele
             toast.error('Error, veuillez selectionner une couleur!');
             return;
         }
+
+        if ((product.taille && product.taille.length > 0) && !selectedTaille) {
+            toast.error('Error, veuillez selectionner une taille!');
+            return;
+        }
+
+
+
         if ((product.shoeSizes && product.shoeSizes.length > 0) && !selectedShoesSize) {
             toast.error('Error, veuillez selectionner une couleur et une taille.!');
             return;
@@ -66,7 +75,8 @@ const AddToCartButton = ({ product, className, selectedSize, selectedColor, sele
         addItem(
             product, 
             selectedSize, 
-            selectedColor, 
+            selectedColor,
+            selectedTaille, 
             selectedShoesSize,
             quantity ?? minQty
     );
@@ -117,7 +127,7 @@ const AddToCartButton = ({ product, className, selectedSize, selectedColor, sele
             {itemCount>0 && (
                 <Link href={'/cart'}>
                 <button className="mt-4 flex items-center justify-center gap-3 py-3 bg-orange-500 hover:bg-orange-600 transition text-white px-2 cursor-pointer rounded-md">
-                    <span className="text-sm font-semibold">Checkout</span>
+                    <span className="text-sm font-semibold">Passer à la commande</span>
                     <ExternalLink size={22} />
                 </button>
                 </Link>

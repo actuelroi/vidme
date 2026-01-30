@@ -219,6 +219,25 @@ export const productType = defineType({
             },
         }),
 
+
+
+        defineField({
+            name: "taille",
+            title: "Available Taille (Ring)",
+            type: "array",
+            of: [{ type: "string" }],
+            options: {
+                list: [
+                    // Extended size ranges for global markets
+                    { title: "6", value: "6" },
+                    { title: "7", value: "7" },
+                    { title: "8", value: "8" },
+                    { title: "9", value: "9" },
+                    { title: "10", value: "10" },
+                    
+                ],
+            },
+        }),
         // ✅ ADD COLOR FIELD
         defineField({
             name: "colors",

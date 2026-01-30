@@ -1,13 +1,14 @@
 // store.ts
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { Product, PRODUCT_BY_ID_QUERY_RESULT } from "./sanity.types";
+import {  PRODUCT_BY_ID_QUERY_RESULT } from "./sanity.types";
 
 export interface CartItem {
   product: PRODUCT_BY_ID_QUERY_RESULT;
   quantity: number;
   selectedSize?: string;
   selectedColor?: string;
+  selectedTaille?: string;
   selectedShoesSize?: string;
   basePrice: number;
   qty?: number
@@ -20,6 +21,7 @@ interface CartState {
     product: PRODUCT_BY_ID_QUERY_RESULT,
     selectedSize?: string,
     selectedColor?: string,
+    selectedTaille?: string,
     selectedShoesSize?: string,
     qty?: number 
    
@@ -30,6 +32,7 @@ interface CartState {
     productId: string,
     selectedSize?: string,
     selectedColor?: string,
+    selectedTaille?: string,
     selectedShoesSize?: string
   ) => void;
 
@@ -37,6 +40,7 @@ interface CartState {
     productId: string,
     selectedSize?: string,
     selectedColor?: string,
+    selectedTaille?: string,
     selectedShoesSize?: string
   ) => void;
 
@@ -46,6 +50,7 @@ interface CartState {
     productId: string,
     selectedSize?: string,
     selectedColor?: string,
+    selectedTaille?: string,
     selectedShoesSize?: string
   ) => number;
 
@@ -59,7 +64,7 @@ const useCartStore = create<CartState>()(
     (set, get) => ({
       items: [],
 
-      addItem: (product, selectedSize, selectedColor, selectedShoesSize,qty) => {
+      addItem: (product, selectedSize, selectedColor,selectedTaille, selectedShoesSize,qty) => {
         const basePrice = product?.price ?? 0;
          const quantityToAdd = qty ?? 1;
 
@@ -69,6 +74,7 @@ const useCartStore = create<CartState>()(
               item.product?._id === product?._id &&
               item.selectedSize === selectedSize &&
               item.selectedColor === selectedColor &&
+              item.selectedTaille === selectedTaille &&
               item.selectedShoesSize === selectedShoesSize
           );
 
@@ -91,6 +97,7 @@ const useCartStore = create<CartState>()(
                 selectedSize,
                 selectedColor,
                 selectedShoesSize,
+                selectedTaille,
                 basePrice,
               },
             ],
@@ -98,13 +105,14 @@ const useCartStore = create<CartState>()(
         });
       },
 
-      removeItem: (productId, selectedSize, selectedColor, selectedShoesSize) => {
+      removeItem: (productId, selectedSize, selectedColor, selectedShoesSize,selectedTaille) => {
         set((state) => ({
           items: state.items.flatMap((item) => {
             const match =
               item.product?._id === productId &&
               item.selectedSize === selectedSize &&
               item.selectedColor === selectedColor &&
+              item.selectedTaille === selectedTaille &&
               item.selectedShoesSize === selectedShoesSize;
 
             if (!match) return [item];
@@ -118,7 +126,7 @@ const useCartStore = create<CartState>()(
         }));
       },
 
-      deleteCartProduct: (productId, selectedSize, selectedColor, selectedShoesSize) =>
+      deleteCartProduct: (productId, selectedSize, selectedColor, selectedShoesSize,selectedTaille) =>
         set((state) => ({
           items: state.items.filter(
             (item) =>
@@ -131,12 +139,13 @@ const useCartStore = create<CartState>()(
 
       resetCart: () => set({ items: [] }),
 
-      getItemCount: (productId, selectedSize, selectedColor, selectedShoesSize) => {
+      getItemCount: (productId, selectedSize, selectedColor, selectedShoesSize,selectedTaille) => {
         const item = get().items.find(
           (item) =>
             item.product?._id === productId &&
             item.selectedSize === selectedSize &&
             item.selectedColor === selectedColor &&
+            item.selectedTaille === selectedTaille &&
             item.selectedShoesSize === selectedShoesSize
         );
         return item?.quantity ?? 0;
@@ -151,6 +160,7 @@ const useCartStore = create<CartState>()(
             g.product?._id === item.product?._id &&
             g.selectedSize === item.selectedSize &&
             g.selectedColor === item.selectedColor &&
+            g.selectedTaille === item.selectedTaille &&
             g.selectedShoesSize === item.selectedShoesSize
           );
 
