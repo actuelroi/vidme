@@ -34,12 +34,12 @@ const page = () => {
   }, [orderNumber, clearCart]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (!userId) {
+
+    if (!userId) {
         console.log("User ID not found. Cannot fetch orders.");
         return;
       }
-
+    const fetchData = async () => {
       try {
         const ordersData = await client.fetch(query, { userId });
         setOrders(ordersData);
