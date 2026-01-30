@@ -50,16 +50,16 @@ const AddToCartButton = ({ product, className, selectedSize, selectedColor, sele
 
         // Check if size/color selection is required but not provided
         if ((product.sizes && product.sizes.length > 0) && !selectedSize) {
-            toast.error('Failed, please select a size');
+            toast.error('Erreur, veuillez selectionner une taille!');
             return;
         }
 
         if ((product.colors && product.colors.length > 0) && !selectedColor) {
-            toast.error('Failed, please select a color');
+            toast.error('Error, veuillez selectionner une color!');
             return;
         }
         if ((product.shoeSizes && product.shoeSizes.length > 0) && !selectedShoesSize) {
-            toast.error('Failed, please select a size and color first');
+            toast.error('Error, veuillez selectionner une coleur et une taille.!');
             return;
         }
 
