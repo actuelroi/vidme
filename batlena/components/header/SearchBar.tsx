@@ -71,6 +71,8 @@ const SearchBar = () => {
       const response = await searchClient.fetch<PRODUCT_BY_ID_QUERY_RESULT[]>(query, params);
       setProducts(response);
 
+      console.log('respnd', response)
+
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
