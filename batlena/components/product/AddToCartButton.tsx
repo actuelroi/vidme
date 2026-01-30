@@ -55,11 +55,11 @@ const AddToCartButton = ({ product, className, selectedSize, selectedColor, sele
         }
 
         if ((product.colors && product.colors.length > 0) && !selectedColor) {
-            toast.error('Error, veuillez selectionner une color!');
+            toast.error('Error, veuillez selectionner une couleur!');
             return;
         }
         if ((product.shoeSizes && product.shoeSizes.length > 0) && !selectedShoesSize) {
-            toast.error('Error, veuillez selectionner une coleur et une taille.!');
+            toast.error('Error, veuillez selectionner une couleur et une taille.!');
             return;
         }
 
