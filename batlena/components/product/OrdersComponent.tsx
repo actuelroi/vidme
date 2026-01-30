@@ -31,7 +31,7 @@ const OrdersComponent = ({ orders }: { orders: MY_ORDERS_QUERY_RESULT }) => {
   const handleDeleteOrder = async (orderId: string,event: React.MouseEvent) => {
     event.stopPropagation(); // Prevent expanding the order when clicking delete
 
-    if (!confirm("Are you sure you want to delete this order? This action cannot be undone.")) {
+    if (!confirm("Etes vous vraiment sure de supprimer cette command? Cette action est irremediable.")) {
       return;
     }
     setIsDeleting(orderId);
@@ -51,7 +51,7 @@ const OrdersComponent = ({ orders }: { orders: MY_ORDERS_QUERY_RESULT }) => {
 
       // Update the local state to remove the deleted order
 
-      toast.success("Order deleted successfully");
+      toast.success("Command supprimé avec success!");
 
       // Refresh the page data to get the updated orders list
       refreshOrders();
@@ -60,7 +60,7 @@ const OrdersComponent = ({ orders }: { orders: MY_ORDERS_QUERY_RESULT }) => {
       toast.error(
         error instanceof Error
           ? error.message
-          : "Failed to delete order. Please try again."
+          : "Echec lors de la suppression. Essayer encore dans quelques instant."
       );
     } finally {
       setIsDeleting(null);
