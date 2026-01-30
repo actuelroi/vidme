@@ -14,10 +14,10 @@ interface Props {
 
 const RightSideProduct = ({ product }: Props) => {
   if (!product) return null;
-
+   const minQty = product.minOrder ?? 1;
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(minQty);
 
   return (
     <div className="p-6 flex flex-col gap-5 max-w-xl mx-auto">

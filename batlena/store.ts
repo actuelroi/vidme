@@ -59,8 +59,9 @@ const useCartStore = create<CartState>()(
     (set, get) => ({
       items: [],
 
-      addItem: (product, selectedSize, selectedColor, selectedShoesSize,qty=1) => {
+      addItem: (product, selectedSize, selectedColor, selectedShoesSize,qty) => {
         const basePrice = product?.price ?? 0;
+         const quantityToAdd = qty ?? 1;
 
         set((state) => {
           const existing = state.items.find(
@@ -75,7 +76,7 @@ const useCartStore = create<CartState>()(
             return {
               items: state.items.map((item) =>
                 item === existing
-                  ? { ...item, quantity: item.quantity + qty }
+                  ? { ...item, quantity: item.quantity + quantityToAdd }
                   : item
               ),
             };
@@ -86,7 +87,7 @@ const useCartStore = create<CartState>()(
               ...state.items,
               {
                 product,
-                quantity: qty,
+                quantity: quantityToAdd,
                 selectedSize,
                 selectedColor,
                 selectedShoesSize,

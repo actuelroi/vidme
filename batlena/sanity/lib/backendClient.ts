@@ -1,12 +1,10 @@
-import { createClient } from "next-sanity";
-
-import { apiVersion, dataset, projectId } from "../env";
+// sanity/lib/backendClient.ts
+import { createClient } from "@sanity/client";
 
 export const backendClient = createClient({
-  projectId,
-  dataset,
-  apiVersion,
-  useCdn: true, // Set to false if statically generating pages, using ISR or tag-based revalidation
-  //  revalidation
-  token: process.env.SANITY_API_TOKEN,
+  projectId: process.env.SANITY_PROJECT_ID!,
+  dataset: process.env.SANITY_DATASET!,
+  apiVersion: "2024-01-01",
+  token: process.env.SANITY_STRIPE_API_TOKEN!,
+  useCdn: false,
 });

@@ -1,5 +1,6 @@
 "use client"
 
+import { createCheckoutSession, Metadata } from '@/actions/createCheckoutSession';
 import FormattedPrice from '@/components/FormattedPrice';
 import Loading from '@/components/Loading';
 import EmptyCart from '@/components/product/EmptyCart'
@@ -11,7 +12,7 @@ import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { urlFor } from '@/sanity/lib/image';
 import useCartStore from '@/store';
-import { useAuth } from '@clerk/nextjs';
+import { useAuth, useUser } from '@clerk/nextjs';
 import { Heart, ShoppingBag, Trash } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -26,6 +27,7 @@ const page = () => {
     const [loading, setLoading] = useState(false);
     const groupedItems = getGroupedItems();
     const { isSignedIn } = useAuth();
+    const { user } = useUser();
 
     useEffect(() => {
         setIsClient(true);
@@ -45,9 +47,27 @@ const page = () => {
 
 
     const handleCheckout = async () => {
+
+        if (!user) {
+            toast.error("Vous devez être connecté");
+            return;
+        }
+
+
         setLoading(true);
         try {
+            const metadata: Metadata = {
+                orderNumber: crypto.randomUUID(),
+                customerName: user?.fullName ?? "Unknown",
+                customerEmail: user?.emailAddresses[0]?.emailAddress ?? "Unknown",
+                clerkUserId: user!.id,
 
+            };
+
+            const checkoutUrl = await createCheckoutSession(groupedItems, metadata);
+            if (checkoutUrl) {
+                window.location.href = checkoutUrl;
+            }
         } catch (error) {
             console.error("Error creating checkout session:", error);
         } finally {
@@ -55,6 +75,8 @@ const page = () => {
         }
     };
 
+
+    
     const handleDeleteProduct = (id: string, selectedSize?: string, selectedColor?: string, selectedShoesSize?: string) => {
         deleteCartProduct(id, selectedSize, selectedColor, selectedShoesSize);
         toast.success("Produit supprimé avec succès !");
