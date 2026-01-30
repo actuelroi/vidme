@@ -42,7 +42,7 @@ const ProductCard = ({ product }: Props) => {
 
 
   return (
-    <div className="w-65 rounded-xl border bg-white shadow-sm overflow-hidden group" role='button' onClick={() => router.push(`/product/${product?.slug?.current}`)}>
+    <div className="w-65 rounded-xl border bg-white shadow-sm overflow-hidden group mx-3" role='button' onClick={() => router.push(`/product/${product?.slug?.current}`)}>
       {/* Image section */}
       <div className="relative h-45 bg-gray-100 group-hover:scale-105 cursor-pointer">
         {discountLabel && (
