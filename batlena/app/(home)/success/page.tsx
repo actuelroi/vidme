@@ -20,6 +20,11 @@ const page = () => {
   const { user } = useUser();
   const userId = user?.id;
 
+   if (!userId) {
+        console.log("User ID not found. Cannot fetch orders.");
+        return;
+      }
+
   const query =
     defineQuery(`*[_type == 'order' && clerkUserId == $userId] | order(orderData desc){
   ...,products[]{
@@ -35,10 +40,6 @@ const page = () => {
 
   useEffect(() => {
 
-    if (!userId) {
-        console.log("User ID not found. Cannot fetch orders.");
-        return;
-      }
     const fetchData = async () => {
       try {
         const ordersData = await client.fetch(query, { userId });
