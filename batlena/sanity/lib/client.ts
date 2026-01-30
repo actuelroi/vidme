@@ -16,4 +16,5 @@ export const searchClient = createClient({
   dataset,
   apiVersion,
   useCdn: false,
+  token: process.env.SANITY_API_READ_TOKEN, // only if needed
 });
