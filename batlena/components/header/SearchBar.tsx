@@ -9,9 +9,9 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+ 
 } from "../ui/dialog";
-import { client } from "@/sanity/lib/client";
+import {  searchClient } from "@/sanity/lib/client";
 
 import AddToCartButton from "../product/AddToCartButton";
 import { urlFor } from "@/sanity/lib/image";
@@ -49,7 +49,8 @@ const SearchBar = () => {
     slug.current match $search ||
     intro match $search ||
     seoDescription match $search ||
-    $search in seoKeywords
+    $search in seoKeywords ||
+    categories[]->title match $search
   )
 ] | order(name asc) {
   ...,
@@ -67,7 +68,7 @@ const SearchBar = () => {
 
      
       const params = { search: `${search}*` };
-      const response = await client.fetch<PRODUCT_BY_ID_QUERY_RESULT[]>(query, params);
+      const response = await searchClient.fetch<PRODUCT_BY_ID_QUERY_RESULT[]>(query, params);
 setProducts(response);
 
     } catch (error) {
