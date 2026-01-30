@@ -3,7 +3,7 @@ import { Input } from '../ui/input'
 import { SearchIcon } from 'lucide-react'
 
 import { Loader2, Search, X } from "lucide-react";
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
