@@ -228,6 +228,9 @@ export const productType = defineType({
             options: {
                 list: [
                     { title: "Black", value: "black" },
+                    { title: "Or", value: "or" },
+                    { title: "Or-rose", value: "or-rose" },
+                    { title: "Argent", value: "argent" },
                     { title: "White", value: "white" },
                     { title: "Red", value: "red" },
                     { title: "Blue", value: "blue" },

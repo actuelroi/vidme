@@ -78,7 +78,7 @@ const AddToCartButton = ({ product, className, selectedSize, selectedColor, sele
             {itemCount ? (
                 <div className="text-sm w-full">
                     <div className="flex items-center justify-between">
-                        <span className="text-xs text-muted-foreground">Quantity</span>
+                        <span className="text-xs text-muted-foreground">Quantité</span>
                         <QuantityButtons
                             product={product}
                             selectedSize={selectedSize}
@@ -108,7 +108,7 @@ const AddToCartButton = ({ product, className, selectedSize, selectedColor, sele
                         className
                     )}
                 >
-                    <span className="text-lg font-semibold">Add to cart</span>
+                    <span className="text-lg font-semibold">Ajouter aux pannier</span>
                     <FaCartShopping size={22} />
                 </Button>
 
