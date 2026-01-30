@@ -15,7 +15,7 @@ import {  searchClient } from "@/sanity/lib/client";
 
 import AddToCartButton from "../product/AddToCartButton";
 import { urlFor } from "@/sanity/lib/image";
-import { Product, PRODUCT_BY_ID_QUERY_RESULT } from "@/sanity.types";
+import {  PRODUCT_BY_ID_QUERY_RESULT } from "@/sanity.types";
 import PriceView from "../PriceView";
 import Image from "next/image";
 import Link from "next/link";
@@ -38,9 +38,19 @@ const SearchBar = () => {
     }
 
     setLoading(true);
+   
+    
+    
+
+
     try {
 
-
+    // Log environment variables
+    console.log("Sanity env:", {
+      projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+      dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
+      apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION,
+    });
 
       const query = `*[
   _type == "product" &&
@@ -68,8 +78,12 @@ const SearchBar = () => {
 
      
       const params = { search: `${search}*` };
+
+        console.log("Running Sanity query with:", { query, params });
+      
       const response = await searchClient.fetch<PRODUCT_BY_ID_QUERY_RESULT[]>(query, params);
-setProducts(response);
+       console.log("Sanity response:", response);
+      setProducts(response);
 
     } catch (error) {
       console.error("Error fetching products:", error);
