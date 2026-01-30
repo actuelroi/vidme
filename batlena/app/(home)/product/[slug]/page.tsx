@@ -6,6 +6,7 @@ import RelatedProducts from "@/components/details/RelatedProduct";
 import RelatedProduct from "@/components/details/RelatedProduct";
 import RightSideProduct from "@/components/details/RighSideProduct";
 import ShipWithConfidence from "@/components/details/ShipWithConfidence";
+import Loading from "@/components/Loading";
 import { getProductBySlug } from "@/sanity/helpers";
 import { Suspense } from "react";
 
@@ -25,7 +26,7 @@ const page = async ({ params }: Props) => {
 
 
   return (
-    <Suspense fallback={<div>Loading products…</div>}>
+    <Suspense fallback={<Loading/>}>
   
     <div className='flex flex-col p-6'>
       <div className='flex flex-col md:flex-row p-6 w-full gap-4'>

@@ -3,7 +3,7 @@
 import useCartStore from "@/store";
 import { Check, Home, Package, ShoppingBag } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
@@ -11,6 +11,7 @@ import { client } from "@/sanity/lib/client";
 import { defineQuery } from "next-sanity";
 import { useUser } from "@clerk/nextjs";
 import { MY_ORDERS_QUERY_RESULT } from "@/sanity.types";
+import Loading from "../Loading";
 
 const SuccessClient = () => {
   const [orders, setOrders] = useState<MY_ORDERS_QUERY_RESULT>([]);
@@ -54,6 +55,7 @@ const SuccessClient = () => {
   }, [userId, query]);
 
   return (
+     <Suspense fallback={<Loading/>}>
     <div className="py-10 bg-linear-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -140,6 +142,7 @@ const SuccessClient = () => {
         </div>
       </motion.div>
     </div>
+    </Suspense>
   );
 };
 

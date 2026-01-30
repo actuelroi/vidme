@@ -16,7 +16,7 @@ import { useAuth, useUser } from '@clerk/nextjs';
 import { Heart, ShoppingBag, Trash } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 
@@ -86,6 +86,7 @@ const page = () => {
     const totalPrice = getTotalPrice();
 
     return (
+           <Suspense fallback={<Loading/>}>
         <div className="bg-gray-50 pb-52 md:pb-10">
 
             {isSignedIn ? (
@@ -305,6 +306,7 @@ const page = () => {
 
 
         </div>
+        </Suspense>
     )
 }
 

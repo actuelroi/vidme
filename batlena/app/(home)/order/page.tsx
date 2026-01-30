@@ -1,3 +1,4 @@
+import Loading from "@/components/Loading";
 import OrdersComponent from "@/components/product/OrdersComponent";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,6 +9,7 @@ import { auth } from "@clerk/nextjs/server";
 import { FileX } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 
 const page = async () => {
@@ -20,6 +22,7 @@ const page = async () => {
   const orders = await getMyOrders(userId);
 
   return (
+    <Suspense fallback={<Loading/>}>
     <div className="py-10">
        {orders?.length ? (
           <Card className="w-full">
@@ -85,6 +88,7 @@ const page = async () => {
           </div>
         )}
     </div>
+    </Suspense>
   )
 }
 
