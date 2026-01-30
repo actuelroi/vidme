@@ -14,7 +14,7 @@ const FormattedPrice = ({ amount, className }: FormattedPriceProps) => {
   
   return (
     <span className={className}>
-      {formattedAmount}
+     € {formattedAmount}
     </span>
   );
 };

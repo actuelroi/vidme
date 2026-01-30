@@ -89,7 +89,7 @@ const AddToCartButton = ({ product, className, selectedSize, selectedColor, sele
                     <div className="flex items-center justify-between border-t pt-1">
                         <span className="text-xs font-semibold">Total</span>
                         <div className="flex items-center gap-x-2">
-                            <span>€</span>
+                            
                             <PriceFormatter
                             amount={product?.price ? product.price * itemCount : 0}
                         />
