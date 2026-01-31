@@ -43,7 +43,7 @@ const firstCategoryRef = (data?.categories?.[0] as any)?._ref;
         <ProductDetail
           product={data}
         />
-        <div className='flex gap-2 flex-row flex-wrap md:flex-nowrap'>
+        <div className='grid grid-cols-1 md:grid-cols-3 gap-2'>
           <ShipWithConfidence
             merchantName={data?.vendor?.name}
             image={data?.vendor?.image}
