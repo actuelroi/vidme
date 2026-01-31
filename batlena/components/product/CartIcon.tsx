@@ -1,8 +1,9 @@
 "use client";
-import useCartStore from "@/store";
-import { ShoppingBag } from "lucide-react";
+
+
+import useCartStore from "@/store/cartStore";
 import Link from "next/link";
-import React from "react";
+
 import { FaCartShopping } from "react-icons/fa6";
 
 const CartIcon = () => {

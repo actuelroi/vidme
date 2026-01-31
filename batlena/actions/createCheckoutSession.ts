@@ -3,7 +3,8 @@
 import Stripe from "stripe";
 import stripe from "@/lib/stripe";
 import { urlFor } from "@/sanity/lib/image";
-import { CartItem } from "@/store";
+import { CartItem } from "@/store/cartStore";
+
 
 export interface Metadata {
     orderNumber: string;
@@ -32,14 +33,9 @@ export async function createCheckoutSession(
 
             let name = item.product?.name ?? "Product";
 
-            const variants = [];
-            if (item.selectedSize) variants.push(`Size: ${item.selectedSize}`);
-            if (item.selectedShoesSize)
-                variants.push(`Size: ${item.selectedShoesSize}`);
-            if (item.selectedColor)
-                variants.push(`Color: ${item.selectedColor}`);
-            if (item.selectedTaille)
-                variants.push(`Color: ${item.selectedTaille}`);
+            const variants = Object.entries(item.options ?? {}).map(
+                ([key, value]) => `${key}: ${value}`
+            );
 
             if (variants.length) {
                 name += ` (${variants.join(", ")})`;
@@ -57,10 +53,8 @@ export async function createCheckoutSession(
                             : undefined,
                         metadata: {
                             productId: item.product?._id ?? "",
-                            selectedSize: item.selectedSize ?? "",
-                            selectedColor: item.selectedColor ?? "",
-                            selectedTaille: item.selectedTaille ?? "",
-                            selectedShoesSize: item.selectedShoesSize ?? "",
+                            variantKey: item.variantKey,
+                            options: JSON.stringify(item.options ?? {}),
                         },
                     },
                 },

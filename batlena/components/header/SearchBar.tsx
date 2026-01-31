@@ -11,14 +11,17 @@ import {
   DialogTitle,
 
 } from "../ui/dialog";
-import { searchClient } from "@/sanity/lib/client";
 
-import AddToCartButton from "../product/AddToCartButton";
 import { urlFor } from "@/sanity/lib/image";
 import { PRODUCT_BY_ID_QUERY_RESULT } from "@/sanity.types";
 import PriceView from "../PriceView";
 import Image from "next/image";
 import Link from "next/link";
+
+import { cn } from '@/lib/utils';
+import { FaCartShopping } from 'react-icons/fa6';
+import { Button } from '../ui/button';
+import { useRouter } from 'next/navigation';
 
 
 const SearchBar = () => {
@@ -27,6 +30,7 @@ const SearchBar = () => {
   const [products, setProducts] = useState<PRODUCT_BY_ID_QUERY_RESULT[]>([]);
   const [loading, setLoading] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const router = useRouter()
 
 
 
@@ -49,7 +53,7 @@ const SearchBar = () => {
     }
   }, [search]);
 
-  
+
 
   // Debounce input changes to reduce API calls
   useEffect(() => {
@@ -60,6 +64,12 @@ const SearchBar = () => {
     return () => clearTimeout(debounceTimer); // Cleanup the timer
   }, [search, fetchProducts]);
 
+
+  const handleClick= (product: PRODUCT_BY_ID_QUERY_RESULT)=>{
+    router.push(`/product/${product?.slug?.current}`)
+    setShowSearch(false)
+    return
+  }
 
 
 
@@ -150,7 +160,19 @@ const SearchBar = () => {
                         </div>
 
                         <div className="w-60 mt-1">
-                          <AddToCartButton product={product} />
+                          <Button
+                            onClick={()=>handleClick(product)}
+                         
+                            size="lg"
+                            className={cn(
+                              "mt-2 flex items-center justify-center bg-orange-500 w-full text-white py-3 border border-darkColor/30 font-semibold tracking-wide hover:text-white",
+                            
+                            )}
+                          >
+                            <span className="text-lg font-semibold">Ajouter au panier</span>
+                            <FaCartShopping size={22} />
+                          </Button>
+
                         </div>
                       </div>
                     </div>

@@ -3,7 +3,7 @@
 
 import Logo from './Logo'
 import SearchBar from './SearchBar'
-import HowItWork from './HowItWork'
+
 
 import Authorisation from './Authorisation'
 import GetTheApp from './get-the-app'
