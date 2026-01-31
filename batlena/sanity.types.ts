@@ -58,9 +58,11 @@ export type Order = {
       [internalGroqTypeReferenceTo]?: "product";
     };
     quantity?: number;
-    selectedSize?: string;
-    selectedColor?: string;
-    selectedShoesSize?: string;
+    options?: Array<{
+      key?: string;
+      value?: string;
+      _key: string;
+    }>;
     unitPrice?: number;
     price?: number;
     _key: string;
@@ -699,8 +701,180 @@ export type PRODUCT_BY_ID_QUERY_RESULT = {
 
 // Source: sanity\helpers\index.ts
 // Variable: PRODUCT_BY_CATEGORY_QUERY
-// Query: *[_type == 'product' && references(*[_type == "category" && slug.current == $categorySlug]._id)] | order(name asc)    {      ...,      vendor->{        _id,          _type,        name,        image      },      categories->{      _id,      title,      },      variants[]{        _key,        price,        stock,        options      },      "inStock": count(variants[stock > 0]) > 0,    }
+// Query: *[_type == 'product' && references(*[_type == "category" && slug.current == $categorySlug]._id)] | order(name asc)    {      ...,      vendor->{        _id,          _type,        name,        image      },          }
 export type PRODUCT_BY_CATEGORY_QUERY_RESULT = Array<{
+  _id: string;
+  _type: "product";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  slug?: Slug;
+  vendor: {
+    _id: string;
+    _type: "vendor";
+    name: string | null;
+    image: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    } | null;
+  } | null;
+  images?: Array<{
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+    _key: string;
+  }>;
+  intro?: string;
+  description?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "h2" | "h3" | "normal";
+    listItem?: "bullet";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }>;
+  variants?: Array<
+    {
+      _key: string;
+    } & ProductVariant
+  >;
+  price?: number;
+  discount?: number;
+  currency?: "AED" | "AUD" | "CAD" | "EUR" | "GBP" | "USD";
+  categories?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "category";
+  }>;
+  minOrder?: number;
+  reviews?: Array<{
+    name?: string;
+    image?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    };
+    message?: string;
+    rating?: number;
+    date?: string;
+    _key: string;
+  }>;
+  productDetails?: {
+    characteristics?: Array<string>;
+    weight?: string;
+    material?: string;
+  };
+  freeShipping?: boolean;
+  likes?: number;
+  rating?: number;
+  reviewCount?: number;
+}>;
+
+// Source: sanity\helpers\index.ts
+// Variable: MY_ORDERS_QUERY
+// Query: *[_type == "order" && clerkUserId == $userId] | order(orderDate desc) {      _id,      orderNumber,      stripeCheckoutSessionId,      stripeCustomerId,      clerkUserId,      customerName,      email,      totalPrice,      currency,      status,      orderDate,      shippingAddress {        name,        line1,        line2,        city,        state,        postal_code,        country,        phone      },      shippingMethod,      shippingCost,      amountDiscount,      products[] {        _key,        quantity,        selectedSize,        selectedColor,        selectedShoesSize,        unitPrice,        price,        product->{          _id,          name,          images,          price,          currency,          slug        }      },      invoice {        id,        number,        hosted_invoice_url      }    }
+export type MY_ORDERS_QUERY_RESULT = Array<{
+  _id: string;
+  orderNumber: string | null;
+  stripeCheckoutSessionId: string | null;
+  stripeCustomerId: string | null;
+  clerkUserId: string | null;
+  customerName: string | null;
+  email: string | null;
+  totalPrice: number | null;
+  currency: string | null;
+  status: "cancelled" | "delivered" | "paid" | "pending" | "shipped" | null;
+  orderDate: string | null;
+  shippingAddress: {
+    name: string | null;
+    line1: string | null;
+    line2: string | null;
+    city: string | null;
+    state: string | null;
+    postal_code: string | null;
+    country: string | null;
+    phone: string | null;
+  } | null;
+  shippingMethod: string | null;
+  shippingCost: number | null;
+  amountDiscount: number | null;
+  products: Array<{
+    _key: string;
+    quantity: number | null;
+    selectedSize: null;
+    selectedColor: null;
+    selectedShoesSize: null;
+    unitPrice: number | null;
+    price: number | null;
+    product: {
+      _id: string;
+      name: string | null;
+      images: Array<{
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        _type: "image";
+        _key: string;
+      }> | null;
+      price: number | null;
+      currency: "AED" | "AUD" | "CAD" | "EUR" | "GBP" | "USD" | null;
+      slug: Slug | null;
+    } | null;
+  }> | null;
+  invoice: {
+    id: string | null;
+    number: string | null;
+    hosted_invoice_url: string | null;
+  } | null;
+}>;
+
+// Source: sanity\helpers\index.ts
+// Variable: RELATED_PRODUCTS_QUERY
+// Query: *[_type == "product" && references($categoryId) && _id != $currentProductId] | order(name asc)[0...5] {      ...,      vendor->{        _id,          _type,        name,        image  },  categories->{      _id,      title,      }, variants[]{        _key,        price,        stock,        options      },      "inStock": count(variants[stock > 0]) > 0,      }
+export type RELATED_PRODUCTS_QUERY_RESULT = Array<{
   _id: string;
   _type: "product";
   _createdAt: string;
@@ -805,178 +979,6 @@ export type PRODUCT_BY_CATEGORY_QUERY_RESULT = Array<{
   inStock: boolean | null;
 }>;
 
-// Source: sanity\helpers\index.ts
-// Variable: MY_ORDERS_QUERY
-// Query: *[_type == "order" && clerkUserId == $userId] | order(orderDate desc) {      _id,      orderNumber,      stripeCheckoutSessionId,      stripeCustomerId,      clerkUserId,      customerName,      email,      totalPrice,      currency,      status,      orderDate,      shippingAddress {        name,        line1,        line2,        city,        state,        postal_code,        country,        phone      },      shippingMethod,      shippingCost,      amountDiscount,      products[] {        _key,        quantity,        selectedSize,        selectedColor,        selectedShoesSize,        unitPrice,        price,        product->{          _id,          name,          images,          price,          currency,          slug        }      },      invoice {        id,        number,        hosted_invoice_url      }    }
-export type MY_ORDERS_QUERY_RESULT = Array<{
-  _id: string;
-  orderNumber: string | null;
-  stripeCheckoutSessionId: string | null;
-  stripeCustomerId: string | null;
-  clerkUserId: string | null;
-  customerName: string | null;
-  email: string | null;
-  totalPrice: number | null;
-  currency: string | null;
-  status: "cancelled" | "delivered" | "paid" | "pending" | "shipped" | null;
-  orderDate: string | null;
-  shippingAddress: {
-    name: string | null;
-    line1: string | null;
-    line2: string | null;
-    city: string | null;
-    state: string | null;
-    postal_code: string | null;
-    country: string | null;
-    phone: string | null;
-  } | null;
-  shippingMethod: string | null;
-  shippingCost: number | null;
-  amountDiscount: number | null;
-  products: Array<{
-    _key: string;
-    quantity: number | null;
-    selectedSize: string | null;
-    selectedColor: string | null;
-    selectedShoesSize: string | null;
-    unitPrice: number | null;
-    price: number | null;
-    product: {
-      _id: string;
-      name: string | null;
-      images: Array<{
-        asset?: {
-          _ref: string;
-          _type: "reference";
-          _weak?: boolean;
-          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-        };
-        media?: unknown;
-        hotspot?: SanityImageHotspot;
-        crop?: SanityImageCrop;
-        alt?: string;
-        _type: "image";
-        _key: string;
-      }> | null;
-      price: number | null;
-      currency: "AED" | "AUD" | "CAD" | "EUR" | "GBP" | "USD" | null;
-      slug: Slug | null;
-    } | null;
-  }> | null;
-  invoice: {
-    id: string | null;
-    number: string | null;
-    hosted_invoice_url: string | null;
-  } | null;
-}>;
-
-// Source: sanity\helpers\index.ts
-// Variable: RELATED_PRODUCTS_QUERY
-// Query: *[_type == "product" && references($categoryId) && _id != $currentProductId] | order(name asc)[0...5] {      ...,      vendor->{        _id,          _type,        name,        image  }}
-export type RELATED_PRODUCTS_QUERY_RESULT = Array<{
-  _id: string;
-  _type: "product";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name?: string;
-  slug?: Slug;
-  vendor: {
-    _id: string;
-    _type: "vendor";
-    name: string | null;
-    image: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
-      media?: unknown;
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      _type: "image";
-    } | null;
-  } | null;
-  images?: Array<{
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: string;
-    _type: "image";
-    _key: string;
-  }>;
-  intro?: string;
-  description?: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "h2" | "h3" | "normal";
-    listItem?: "bullet";
-    markDefs?: Array<{
-      href?: string;
-      _type: "link";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
-    _key: string;
-  }>;
-  variants?: Array<
-    {
-      _key: string;
-    } & ProductVariant
-  >;
-  price?: number;
-  discount?: number;
-  currency?: "AED" | "AUD" | "CAD" | "EUR" | "GBP" | "USD";
-  categories?: Array<{
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    _key: string;
-    [internalGroqTypeReferenceTo]?: "category";
-  }>;
-  minOrder?: number;
-  reviews?: Array<{
-    name?: string;
-    image?: {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
-      media?: unknown;
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      _type: "image";
-    };
-    message?: string;
-    rating?: number;
-    date?: string;
-    _key: string;
-  }>;
-  productDetails?: {
-    characteristics?: Array<string>;
-    weight?: string;
-    material?: string;
-  };
-  freeShipping?: boolean;
-  likes?: number;
-  rating?: number;
-  reviewCount?: number;
-}>;
-
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
@@ -984,8 +986,8 @@ declare module "@sanity/client" {
     '\n    *[_type == "product"] | order(name asc) {\n      ...,\n      vendor->{\n        _id,\n          _type,\n        name,\n        image\n      },\n      categories->{\n      _id,\n      title,\n      },\n       variants[]{\n        _key,\n        price,\n        stock,\n        options\n      },\n      "inStock": count(variants[stock > 0]) > 0,\n    }\n  ': PRODUCTS_QUERY_RESULT;
     '*[_type == "product" && name match $searchParam] | order(name asc)': PRODUCT_SEARCH_QUERY_RESULT;
     '*[_type == "product" && slug.current == $slug] | order(name asc) [0]\n    {\n      ...,\n      vendor->{\n  _id,\n  _type,\n  _createdAt,\n  _updatedAt,\n  _rev,\n  name,\n  image,\n  rating\n},\ncategories->{\n      _id,\n      title,\n      },\n variants[]{\n        _key,\n        price,\n        stock,\n        options\n      },\n      "inStock": count(variants[stock > 0]) > 0,\n    }': PRODUCT_BY_ID_QUERY_RESULT;
-    '*[_type == \'product\' && references(*[_type == "category" && slug.current == $categorySlug]._id)] | order(name asc)\n    {\n      ...,\n      vendor->{\n        _id,\n          _type,\n        name,\n        image\n      },\n      categories->{\n      _id,\n      title,\n      },\n      variants[]{\n        _key,\n        price,\n        stock,\n        options\n      },\n      "inStock": count(variants[stock > 0]) > 0,\n    }': PRODUCT_BY_CATEGORY_QUERY_RESULT;
+    "*[_type == 'product' && references(*[_type == \"category\" && slug.current == $categorySlug]._id)] | order(name asc)\n    {\n      ...,\n      vendor->{\n        _id,\n          _type,\n        name,\n        image\n      },\n      \n    }": PRODUCT_BY_CATEGORY_QUERY_RESULT;
     '\n    *[_type == "order" && clerkUserId == $userId] | order(orderDate desc) {\n      _id,\n      orderNumber,\n      stripeCheckoutSessionId,\n      stripeCustomerId,\n      clerkUserId,\n      customerName,\n      email,\n      totalPrice,\n      currency,\n      status,\n      orderDate,\n      shippingAddress {\n        name,\n        line1,\n        line2,\n        city,\n        state,\n        postal_code,\n        country,\n        phone\n      },\n      shippingMethod,\n      shippingCost,\n      amountDiscount,\n      products[] {\n        _key,\n        quantity,\n        selectedSize,\n        selectedColor,\n        selectedShoesSize,\n        unitPrice,\n        price,\n        product->{\n          _id,\n          name,\n          images,\n          price,\n          currency,\n          slug\n        }\n      },\n      invoice {\n        id,\n        number,\n        hosted_invoice_url\n      }\n    }\n  ': MY_ORDERS_QUERY_RESULT;
-    '\n    *[_type == "product" && references($categoryId) && _id != $currentProductId] | order(name asc)[0...5] {\n      ...,\n      vendor->{\n        _id,\n          _type,\n        name,\n        image\n  }}\n  ': RELATED_PRODUCTS_QUERY_RESULT;
+    '\n    *[_type == "product" && references($categoryId) && _id != $currentProductId] | order(name asc)[0...5] {\n      ...,\n      vendor->{\n        _id,\n          _type,\n        name,\n        image\n  },\n  categories->{\n      _id,\n      title,\n      },\n variants[]{\n        _key,\n        price,\n        stock,\n        options\n      },\n      "inStock": count(variants[stock > 0]) > 0,\n      }\n  ': RELATED_PRODUCTS_QUERY_RESULT;
   }
 }

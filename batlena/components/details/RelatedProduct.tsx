@@ -18,7 +18,7 @@ const RelatedProducts = async ({ categoryId, currentProductId }: Props) => {
 
   const data =  await getRelatedProducts(categoryId, currentProductId)
   
-
+  
 
   return (
     <div className="my-10">
