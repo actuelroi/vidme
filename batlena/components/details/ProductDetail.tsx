@@ -1,9 +1,6 @@
-
-
-
-
 "use client";
 
+import { useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -14,7 +11,6 @@ import { PRODUCT_BY_ID_QUERY_RESULT } from "@/sanity.types";
 import { PortableText } from "@portabletext/react";
 import { calculateDeliveryRange } from "@/utils/shipping";
 
-
 interface Props {
   product: PRODUCT_BY_ID_QUERY_RESULT;
 }
@@ -22,12 +18,17 @@ interface Props {
 const ProductDetail = ({ product }: Props) => {
   if (!product) return null;
 
-  const { productDetails, description, freeShipping,
-    shippingTime = "standard", } = product;
+  const { productDetails, description, freeShipping, variants = [] } = product;
 
+  // Track selected variant (default to first variant)
 
-  const deliveryRange = calculateDeliveryRange(shippingTime);
+  const safeVariants: NonNullable<typeof product.variants> = product.variants || [];
+ const [selectedVariant, setSelectedVariant] = useState(safeVariants[0] || null);
 
+  // Calculate delivery range based on selected variant
+  const deliveryRange = calculateDeliveryRange(selectedVariant?.shippingTime || "standard");
+
+  // Prepare product detail items
   const detailItems = [
     { label: "Characteristics", value: productDetails?.characteristics },
     { label: "Materiel", value: productDetails?.material ? [productDetails.material] : [] },
@@ -36,6 +37,7 @@ const ProductDetail = ({ product }: Props) => {
 
   return (
     <div className="w-full flex flex-col md:flex-row justify-between my-10 gap-6 mb-15">
+      
       {/* Left: Product Details Accordion */}
       <div className="w-full md:w-1/2">
         <h1 className="m-4 text-2xl font-semibold">Details du produit</h1>
@@ -56,8 +58,11 @@ const ProductDetail = ({ product }: Props) => {
         </Accordion>
       </div>
 
-      {/* Right: Description */}
+      {/* Right: Description + Shipping + Variant Selector */}
       <div className="flex-1 flex flex-col">
+        
+      
+
         {/* Shipping */}
         <div className="border-t pt-4 space-y-3 text-sm">
           <div>
@@ -82,6 +87,7 @@ const ProductDetail = ({ product }: Props) => {
           </div>
         </div>
 
+        {/* Description */}
         <div className="border-t pt-4">
           <h2 className="font-semibold md:text-2xl text-xl mb-2">Description du produit</h2>
           {description && description.length > 0 ? (

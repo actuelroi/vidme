@@ -94,6 +94,7 @@ categories->{
         _key,
         price,
         stock,
+        shippingTime,
         options
       },
       "inStock": count(variants[stock > 0]) > 0,
