@@ -1,5 +1,5 @@
 // schemas/productVariant.ts
-import { defineField, defineType } from "sanity";
+import { defineField, defineType, defineArrayMember } from "sanity";
 
 export const productVariant = defineType({
   name: "productVariant",
@@ -9,53 +9,48 @@ export const productVariant = defineType({
     defineField({
       name: "options",
       title: "Variant Options",
-      type: "object",
-      fields: [
-        defineField({
-          name: "color",
-          title: "Color",
-          type: "array",
-          of: [{ type: "string" }],
-          options: {
-            layout: "tags"
-          },
-        }),
-        defineField({
-          name: "size",
-          title: "Size (Clothing)",
-          type: "array",
-          of: [{ type: "string" }],
-          options: {
-            layout: "tags"
-          },
-        }),
-        defineField({
-          name: "shoeSize",
-          title: "Shoe Size",
-          type: "array",
-          of: [{ type: "string" }],
-          options: {
-            layout: "tags"
-          },
-        }),
-        defineField({
-          name: "ringSize",
-          title: "Ring Size",
-          type: "array",
-          of: [{ type: "string" }],
-          options: {
-            layout: "tags"
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "object",
+          name: "option",
+          title: "Option",
+          fields: [
+            defineField({
+              name: "name",
+              title: "Option Name",
+              type: "string",
+              description: "e.g., color, size, shoeSize",
+            }),
+            defineField({
+              name: "values",
+              title: "Option Values",
+              type: "array",
+              of: [{ type: "string" }],
+              options: { layout: "tags" },
+            }),
+          ],
+          preview: {
+            select: {
+              name: "name",
+              values: "values",
+            },
+            prepare({ name, values }) {
+              return {
+                title: name,
+                subtitle: values?.join(", "),
+              };
+            },
           },
         }),
       ],
     }),
 
-
     defineField({
       name: "stock",
       title: "Stock",
       type: "number",
-      validation: Rule => Rule.min(0),
+      validation: (Rule) => Rule.min(0),
     }),
 
     defineField({
@@ -74,22 +69,21 @@ export const productVariant = defineType({
           { title: "Standard 3-7 days", value: "standard" },
           { title: "Economy 7-14 days", value: "economy" },
           { title: "Global 10-21 days", value: "global" },
-        ]
-      }
+        ],
+      },
     }),
   ],
 
   preview: {
     select: {
-      color: "options.color",
-      size: "options.size",
-      shoeSize: "options.shoeSize",
-      ringSize: "options.ringSize",
+      options: "options",
       price: "price",
       media: "image",
     },
-    prepare({ color, size, shoeSize, ringSize, price, media }) {
-      const opts = [color, size, shoeSize, ringSize].filter(Boolean).join(" / ");
+    prepare({ options, price, media }) {
+      const opts = options
+        ?.map((o: any) => `${o.name}: ${o.values?.join(", ")}`)
+        .join(" / ");
       return {
         title: opts || "Variant",
         subtitle: price ? `€${price}` : "",

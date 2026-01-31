@@ -7,7 +7,7 @@ import { BsQuestion } from "react-icons/bs";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import OptionSelector from "./OptionSelector";
 
-import { extractOptions } from "@/types/cart";
+import { extractOptions, optionsArrayToRecord } from "@/types/cart";
 import AddToCartButton from "./AddToCartButton";
 import useCartStore from "@/store/cartStore";
 
@@ -53,17 +53,35 @@ const RightSideProduct = ({ product }: Props) => {
   );
 
 
-  const selectedVariant = useMemo(() => {
-    return variants.find((variant) => {
-      if (!variant.options) return false;
+const selectedVariant = useMemo(() => {
+  return variants.find((variant) => {
+    if (!variant.options) return false;
 
-      return Object.entries(selectedOptions).every(
-        ([key, value]) =>
-          !value ||
-          variant.options?.[key as keyof typeof variant.options]?.includes(value)
-      );
+    // Check every selected option against the variant's options array
+    return Object.entries(selectedOptions).every(([key, value]) => {
+      if (!value) return true; // skip if no value selected
+
+      // Find the option object in this variant that matches the key
+      const option = variant.options?.find((opt) => opt.name === key);
+      if (!option || !option.values) return false;
+
+      // Check if the variant's option values include the selected value
+      return option.values.includes(value);
     });
-  }, [variants, selectedOptions]);
+  });
+}, [variants, selectedOptions]);
+
+
+
+
+const selectedVariantWithRecord = useMemo(() => {
+  if (!selectedVariant) return null;
+
+  return {
+    ...selectedVariant,
+    options: optionsArrayToRecord(selectedVariant.options),
+  };
+}, [selectedVariant]);
 
 
   useEffect(() => {
@@ -150,10 +168,10 @@ const RightSideProduct = ({ product }: Props) => {
 
 
       </div>
-      {product && selectedVariant && (
+      {product && selectedVariantWithRecord && (
         <AddToCartButton
           product={product} // TS now knows product is NOT null
-          variant={selectedVariant} // can still be undefined if no options selected
+          variant={selectedVariantWithRecord} // can still be undefined if no options selected
           selectedOptions={selectedOptions}
           quantity={quantity}
         />
