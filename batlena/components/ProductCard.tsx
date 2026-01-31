@@ -16,6 +16,7 @@ import { urlFor } from "@/sanity/lib/image";
 import Link from 'next/link'
 import { PRODUCTS_QUERY_RESULT } from '@/sanity.types'
 import { countAllVariantOptions, getDiscountLabel } from '@/utils/productOptions'
+import {  convertSanityOptionsToArray } from '@/utils/variantOptions'
 
 
 type ProductFromQuery = PRODUCTS_QUERY_RESULT[number]
@@ -35,7 +36,14 @@ const ProductCard = ({ product }: Props) => {
   if (!product) return null
 
 
- const optionCounts = countAllVariantOptions(product.variants)
+const optionCounts = countAllVariantOptions(
+  product.variants?.map(variant => ({
+    ...variant,
+    options: convertSanityOptionsToArray(variant.options), // ✅ strips _type/_key
+  })) ?? null
+)
+
+
 
   const discountLabel = getDiscountLabel(product.discount)
 

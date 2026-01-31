@@ -11,9 +11,15 @@ export interface CartItem {
 }
 
 
+
 export function extractOptions(
   variants: {
-    options: Record<string, unknown> | null;
+    options: {
+      _key: string;
+      _type: "option";
+      name?: string;
+      values?: string[];
+    }[] | null;
   }[]
 ) {
   const result: Record<string, string[]> = {};
@@ -21,8 +27,11 @@ export function extractOptions(
   variants.forEach((variant) => {
     if (!variant.options) return;
 
-    Object.entries(variant.options).forEach(([key, values]) => {
-      if (!Array.isArray(values) || values.length === 0) return;
+    variant.options.forEach((option) => {
+      const key = option.name;
+      const values = option.values;
+
+      if (!key || !Array.isArray(values) || values.length === 0) return;
 
       if (!result[key]) {
         result[key] = [];
@@ -37,4 +46,18 @@ export function extractOptions(
   });
 
   return result;
+}
+
+
+export function optionsArrayToRecord(
+  options: { name?: string; values?: string[] }[] | null
+): Record<string, string[] | undefined> | null {
+  if (!options) return null;
+
+  return options.reduce((acc, opt) => {
+    if (opt.name && opt.values) {
+      acc[opt.name] = opt.values;
+    }
+    return acc;
+  }, {} as Record<string, string[] | undefined>);
 }

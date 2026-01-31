@@ -150,6 +150,7 @@ const useCartStore = create<CartState>()(
                 set({ items: [] });
                 if (typeof window !== "undefined") {
                     localStorage.removeItem("cart-store-dynamic");
+                    window.dispatchEvent(new Event("storage"));
                 }
             },
 

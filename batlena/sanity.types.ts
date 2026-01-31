@@ -133,12 +133,12 @@ export type Slug = {
 
 export type ProductVariant = {
   _type: "productVariant";
-  options?: {
-    color?: Array<string>;
-    size?: Array<string>;
-    shoeSize?: Array<string>;
-    ringSize?: Array<string>;
-  };
+  options?: Array<{
+    name?: string;
+    values?: Array<string>;
+    _type: "option";
+    _key: string;
+  }>;
   stock?: number;
   sku?: string;
   shippingTime?: "express" | "standard" | "economy" | "global";
@@ -448,12 +448,12 @@ export type PRODUCTS_QUERY_RESULT = Array<{
     _key: string;
     price: null;
     stock: number | null;
-    options: {
-      color?: Array<string>;
-      size?: Array<string>;
-      shoeSize?: Array<string>;
-      ringSize?: Array<string>;
-    } | null;
+    options: Array<{
+      name?: string;
+      values?: Array<string>;
+      _type: "option";
+      _key: string;
+    }> | null;
   }> | null;
   price?: number;
   discount?: number;
@@ -657,12 +657,12 @@ export type PRODUCT_BY_ID_QUERY_RESULT = {
     price: null;
     stock: number | null;
     shippingTime: "economy" | "express" | "global" | "standard" | null;
-    options: {
-      color?: Array<string>;
-      size?: Array<string>;
-      shoeSize?: Array<string>;
-      ringSize?: Array<string>;
-    } | null;
+    options: Array<{
+      name?: string;
+      values?: Array<string>;
+      _type: "option";
+      _key: string;
+    }> | null;
   }> | null;
   price?: number;
   discount?: number;
@@ -765,12 +765,12 @@ export type PRODUCT_BY_CATEGORY_QUERY_RESULT = Array<{
     _key: string;
     price: null;
     stock: number | null;
-    options: {
-      color?: Array<string>;
-      size?: Array<string>;
-      shoeSize?: Array<string>;
-      ringSize?: Array<string>;
-    } | null;
+    options: Array<{
+      name?: string;
+      values?: Array<string>;
+      _type: "option";
+      _key: string;
+    }> | null;
   }> | null;
   price?: number;
   discount?: number;
@@ -938,12 +938,12 @@ export type RELATED_PRODUCTS_QUERY_RESULT = Array<{
     _key: string;
     price: null;
     stock: number | null;
-    options: {
-      color?: Array<string>;
-      size?: Array<string>;
-      shoeSize?: Array<string>;
-      ringSize?: Array<string>;
-    } | null;
+    options: Array<{
+      name?: string;
+      values?: Array<string>;
+      _type: "option";
+      _key: string;
+    }> | null;
   }> | null;
   price?: number;
   discount?: number;

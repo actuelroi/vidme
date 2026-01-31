@@ -1,5 +1,4 @@
-"use client";
-
+'use client';
 
 import { Check, Home, Package, ShoppingBag } from "lucide-react";
 import { useSearchParams } from "next/navigation";
@@ -28,22 +27,23 @@ const SuccessClient = () => {
     ...,products[]{...,product->}
   }`);
 
-  // ✅ ALWAYS called
+  //  Clear cart immediately on success
   useEffect(() => {
     if (!orderNumber) return;
 
+    // Fully clear the store (memory + persisted)
     clearCart();
 
-    // Optional: clean URL so refresh doesn’t re-trigger logic
+    // Clean URL so refresh doesn’t re-trigger
     window.history.replaceState({}, "", "/success");
-  }, []);
+  }, [orderNumber, clearCart]);
 
+  // Hydration flag to avoid mismatch
   useEffect(() => {
     setHydrated(true);
   }, []);
 
-
-  // ✅ ALWAYS called
+  // Fetch user's orders
   useEffect(() => {
     if (!isLoaded || !isSignedIn || !userId) return;
 
@@ -59,10 +59,8 @@ const SuccessClient = () => {
     fetchData();
   }, [isLoaded, isSignedIn, userId, query]);
 
-
   if (!isLoaded) return <Loading />;
   if (!isSignedIn) return null;
-
   if (!hydrated) return null;
 
   return (
@@ -74,6 +72,7 @@ const SuccessClient = () => {
           transition={{ duration: 0.5 }}
           className="bg-white rounded-2xl shadow-2xl px-8 py-12 max-w-xl w-full text-center"
         >
+          {/*  Success Icon */}
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
@@ -86,6 +85,7 @@ const SuccessClient = () => {
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
             Order Confirmed!
           </h1>
+
           <div className="space-y-4 mb-8 text-left">
             <p className="text-gray-700">
               Thank you for your purchase. We&apos;re processing your order and
@@ -98,6 +98,7 @@ const SuccessClient = () => {
             </p>
           </div>
 
+          {/* What's next */}
           <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-8">
             <h2 className="font-semibold text-gray-900 mb-2">
               What&apos;s Next?
@@ -109,6 +110,7 @@ const SuccessClient = () => {
             </ul>
           </div>
 
+          {/* Recent Orders */}
           <div className="mb-8">
             <h3 className="font-semibold text-gray-900 mb-2">Recent Orders</h3>
             <div className="space-y-2">
@@ -128,6 +130,7 @@ const SuccessClient = () => {
             </div>
           </div>
 
+          {/* Navigation */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Link
               href="/"
@@ -158,5 +161,3 @@ const SuccessClient = () => {
 };
 
 export default SuccessClient;
-
-

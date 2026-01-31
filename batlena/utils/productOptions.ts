@@ -10,12 +10,13 @@ export const getDiscountLabel = (discount?: number) => {
 }
 
 
-
-
-type VariantOptions = Record<string, string[] | undefined>
+type VariantOptionObject = {
+  name?: string
+  values?: string[]
+}
 
 export const countAllVariantOptions = (
-  variants: { options: VariantOptions | null }[] | null
+  variants: { options: VariantOptionObject[] | null }[] | null
 ): Record<string, number> => {
   if (!variants) return {}
 
@@ -24,14 +25,13 @@ export const countAllVariantOptions = (
   variants.forEach(variant => {
     if (!variant.options) return
 
-    Object.entries(variant.options).forEach(([optionName, values]) => {
-      if (!Array.isArray(values)) return
+    variant.options.forEach(option => {
+      const key = option.name
+      const values = option.values
+      if (!key || !Array.isArray(values)) return
 
-      if (!optionMap[optionName]) {
-        optionMap[optionName] = new Set()
-      }
-
-      values.forEach(value => optionMap[optionName].add(value))
+      if (!optionMap[key]) optionMap[key] = new Set()
+      values.forEach(value => optionMap[key].add(value))
     })
   })
 
