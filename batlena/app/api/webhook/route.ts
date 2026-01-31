@@ -141,7 +141,7 @@ async function createOrderInSanity(
 
     const shippingDetails = (session as any).collected_information?.shipping_details;
     console.log("Shipping details from collected_information:", shippingDetails);
-    const customerDetails = session.customer_details;
+
 
     const { orderNumber, customerName, customerEmail, clerkUserId } = metadata as unknown as Metadata;
 
@@ -163,13 +163,15 @@ async function createOrderInSanity(
             const productMetadata = (item.price?.product as Stripe.Product)?.metadata;
             const productId = productMetadata?.productId;
 
-            // Extract size and color from metadata
-            const selectedSize = productMetadata?.selectedSize || '';
-            const selectedColor = productMetadata?.selectedColor || '';
-            const selectedShoesSize = productMetadata?.selectedShoesSize || '';
+            const optionsArray = Object.entries(productMetadata || {})
+                .filter(([key, value]) => value) // remove empty values
+                .map(([key, value]) => ({
+                    _key: crypto.randomUUID(),
+                    key,
+                    value: String(value), // ensure value is a string
+                }));
 
-
-            // ✅ Use the actual price charged by Stripe (already converted)
+            // Use the actual price charged by Stripe (already converted)
             const actualUnitPrice = item.price?.unit_amount ? item.price.unit_amount / 100 : 0;
             const actualPrice = item.amount_total ? item.amount_total / 100 : 0;
 
@@ -188,9 +190,7 @@ async function createOrderInSanity(
                 quantity: item?.quantity || 0,
                 price: actualPrice, // Use the actual total price for this line item
                 unitPrice: actualUnitPrice, // Use the actual unit price (already converted)
-                selectedSize: selectedSize || undefined,
-                selectedColor: selectedColor || undefined,
-                selectedShoesSize: selectedShoesSize || undefined,
+                 options: optionsArray,
             };
         });
 
@@ -254,7 +254,7 @@ async function createOrderInSanity(
         console.log("Order data to create:", orderData);
 
 
-       
+
 
 
         const existing = await backendClient.fetch(
@@ -267,7 +267,7 @@ async function createOrderInSanity(
             return existing;
         }
 
-        
+
         const order = await backendClient.create(orderData);
         return order;
     } catch (error) {

@@ -129,6 +129,19 @@ export type Slug = {
   source?: string;
 };
 
+export type ProductVariant = {
+  _type: "productVariant";
+  options?: {
+    color?: Array<string>;
+    size?: Array<string>;
+    shoeSize?: Array<string>;
+    ringSize?: Array<string>;
+  };
+  stock?: number;
+  sku?: string;
+  shippingTime?: "express" | "standard" | "economy" | "global";
+};
+
 export type Product = {
   _id: string;
   _type: "product";
@@ -137,8 +150,6 @@ export type Product = {
   _rev: string;
   name?: string;
   slug?: Slug;
-  seoDescription?: string;
-  seoKeywords?: Array<string>;
   vendor?: {
     _ref: string;
     _type: "reference";
@@ -178,9 +189,13 @@ export type Product = {
     _type: "block";
     _key: string;
   }>;
+  variants?: Array<
+    {
+      _key: string;
+    } & ProductVariant
+  >;
   price?: number;
   discount?: number;
-  originalPrice?: number;
   currency?: "EUR" | "USD" | "GBP" | "CAD" | "AUD" | "AED";
   categories?: Array<{
     _ref: string;
@@ -189,13 +204,7 @@ export type Product = {
     _key: string;
     [internalGroqTypeReferenceTo]?: "category";
   }>;
-  stock?: number;
   minOrder?: number;
-  status?: "best" | "hot" | "new";
-  shoeSizes?: Array<string>;
-  sizes?: Array<string>;
-  taille?: Array<string>;
-  colors?: Array<string>;
   reviews?: Array<{
     name?: string;
     image?: {
@@ -224,7 +233,6 @@ export type Product = {
   likes?: number;
   rating?: number;
   reviewCount?: number;
-  shippingTime?: "express" | "standard" | "economy" | "global";
 };
 
 export type Vendor = {
@@ -353,6 +361,7 @@ export type AllSanitySchemaTypes =
   | SanityImageCrop
   | SanityImageHotspot
   | Slug
+  | ProductVariant
   | Product
   | Vendor
   | SanityImagePaletteSwatch
@@ -374,7 +383,7 @@ type ArrayOf<T> = Array<
 
 // Source: sanity\helpers\index.ts
 // Variable: PRODUCTS_QUERY
-// Query: *[_type == "product"] | order(name asc) {      ...,      vendor->{        _id,          _type,        name,        image      }    }
+// Query: *[_type == "product"] | order(name asc) {      ...,      vendor->{        _id,          _type,        name,        image      },      categories->{      _id,      title,      },       variants[]{        _key,        price,        stock,        options      },      "inStock": count(variants[stock > 0]) > 0,    }
 export type PRODUCTS_QUERY_RESULT = Array<{
   _id: string;
   _type: "product";
@@ -383,8 +392,6 @@ export type PRODUCTS_QUERY_RESULT = Array<{
   _rev: string;
   name?: string;
   slug?: Slug;
-  seoDescription?: string;
-  seoKeywords?: Array<string>;
   vendor: {
     _id: string;
     _type: "vendor";
@@ -435,24 +442,22 @@ export type PRODUCTS_QUERY_RESULT = Array<{
     _type: "block";
     _key: string;
   }>;
+  variants: Array<{
+    _key: string;
+    price: null;
+    stock: number | null;
+    options: {
+      color?: Array<string>;
+      size?: Array<string>;
+      shoeSize?: Array<string>;
+      ringSize?: Array<string>;
+    } | null;
+  }> | null;
   price?: number;
   discount?: number;
-  originalPrice?: number;
   currency?: "AED" | "AUD" | "CAD" | "EUR" | "GBP" | "USD";
-  categories?: Array<{
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    _key: string;
-    [internalGroqTypeReferenceTo]?: "category";
-  }>;
-  stock?: number;
+  categories: null;
   minOrder?: number;
-  status?: "best" | "hot" | "new";
-  shoeSizes?: Array<string>;
-  sizes?: Array<string>;
-  taille?: Array<string>;
-  colors?: Array<string>;
   reviews?: Array<{
     name?: string;
     image?: {
@@ -481,7 +486,7 @@ export type PRODUCTS_QUERY_RESULT = Array<{
   likes?: number;
   rating?: number;
   reviewCount?: number;
-  shippingTime?: "economy" | "express" | "global" | "standard";
+  inStock: boolean | null;
 }>;
 
 // Source: sanity\helpers\index.ts
@@ -495,8 +500,6 @@ export type PRODUCT_SEARCH_QUERY_RESULT = Array<{
   _rev: string;
   name?: string;
   slug?: Slug;
-  seoDescription?: string;
-  seoKeywords?: Array<string>;
   vendor?: {
     _ref: string;
     _type: "reference";
@@ -536,9 +539,13 @@ export type PRODUCT_SEARCH_QUERY_RESULT = Array<{
     _type: "block";
     _key: string;
   }>;
+  variants?: Array<
+    {
+      _key: string;
+    } & ProductVariant
+  >;
   price?: number;
   discount?: number;
-  originalPrice?: number;
   currency?: "AED" | "AUD" | "CAD" | "EUR" | "GBP" | "USD";
   categories?: Array<{
     _ref: string;
@@ -547,13 +554,7 @@ export type PRODUCT_SEARCH_QUERY_RESULT = Array<{
     _key: string;
     [internalGroqTypeReferenceTo]?: "category";
   }>;
-  stock?: number;
   minOrder?: number;
-  status?: "best" | "hot" | "new";
-  shoeSizes?: Array<string>;
-  sizes?: Array<string>;
-  taille?: Array<string>;
-  colors?: Array<string>;
   reviews?: Array<{
     name?: string;
     image?: {
@@ -582,12 +583,11 @@ export type PRODUCT_SEARCH_QUERY_RESULT = Array<{
   likes?: number;
   rating?: number;
   reviewCount?: number;
-  shippingTime?: "economy" | "express" | "global" | "standard";
 }>;
 
 // Source: sanity\helpers\index.ts
 // Variable: PRODUCT_BY_ID_QUERY
-// Query: *[_type == "product" && slug.current == $slug] | order(name asc) [0]    {      ...,      vendor->{  _id,  _type,  _createdAt,  _updatedAt,  _rev,  name,  image,  rating}    }
+// Query: *[_type == "product" && slug.current == $slug] | order(name asc) [0]    {      ...,      vendor->{  _id,  _type,  _createdAt,  _updatedAt,  _rev,  name,  image,  rating},categories->{      _id,      title,      }, variants[]{        _key,        price,        stock,        options      },      "inStock": count(variants[stock > 0]) > 0,    }
 export type PRODUCT_BY_ID_QUERY_RESULT = {
   _id: string;
   _type: "product";
@@ -596,8 +596,6 @@ export type PRODUCT_BY_ID_QUERY_RESULT = {
   _rev: string;
   name?: string;
   slug?: Slug;
-  seoDescription?: string;
-  seoKeywords?: Array<string>;
   vendor: {
     _id: string;
     _type: "vendor";
@@ -652,24 +650,22 @@ export type PRODUCT_BY_ID_QUERY_RESULT = {
     _type: "block";
     _key: string;
   }>;
+  variants: Array<{
+    _key: string;
+    price: null;
+    stock: number | null;
+    options: {
+      color?: Array<string>;
+      size?: Array<string>;
+      shoeSize?: Array<string>;
+      ringSize?: Array<string>;
+    } | null;
+  }> | null;
   price?: number;
   discount?: number;
-  originalPrice?: number;
   currency?: "AED" | "AUD" | "CAD" | "EUR" | "GBP" | "USD";
-  categories?: Array<{
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    _key: string;
-    [internalGroqTypeReferenceTo]?: "category";
-  }>;
-  stock?: number;
+  categories: null;
   minOrder?: number;
-  status?: "best" | "hot" | "new";
-  shoeSizes?: Array<string>;
-  sizes?: Array<string>;
-  taille?: Array<string>;
-  colors?: Array<string>;
   reviews?: Array<{
     name?: string;
     image?: {
@@ -698,12 +694,12 @@ export type PRODUCT_BY_ID_QUERY_RESULT = {
   likes?: number;
   rating?: number;
   reviewCount?: number;
-  shippingTime?: "economy" | "express" | "global" | "standard";
+  inStock: boolean | null;
 } | null;
 
 // Source: sanity\helpers\index.ts
 // Variable: PRODUCT_BY_CATEGORY_QUERY
-// Query: *[_type == 'product' && references(*[_type == "category" && slug.current == $categorySlug]._id)] | order(name asc)    {      ...,      vendor->{        _id,          _type,        name,        image      }    }
+// Query: *[_type == 'product' && references(*[_type == "category" && slug.current == $categorySlug]._id)] | order(name asc)    {      ...,      vendor->{        _id,          _type,        name,        image      },      categories->{      _id,      title,      },      variants[]{        _key,        price,        stock,        options      },      "inStock": count(variants[stock > 0]) > 0,    }
 export type PRODUCT_BY_CATEGORY_QUERY_RESULT = Array<{
   _id: string;
   _type: "product";
@@ -712,8 +708,6 @@ export type PRODUCT_BY_CATEGORY_QUERY_RESULT = Array<{
   _rev: string;
   name?: string;
   slug?: Slug;
-  seoDescription?: string;
-  seoKeywords?: Array<string>;
   vendor: {
     _id: string;
     _type: "vendor";
@@ -764,24 +758,22 @@ export type PRODUCT_BY_CATEGORY_QUERY_RESULT = Array<{
     _type: "block";
     _key: string;
   }>;
+  variants: Array<{
+    _key: string;
+    price: null;
+    stock: number | null;
+    options: {
+      color?: Array<string>;
+      size?: Array<string>;
+      shoeSize?: Array<string>;
+      ringSize?: Array<string>;
+    } | null;
+  }> | null;
   price?: number;
   discount?: number;
-  originalPrice?: number;
   currency?: "AED" | "AUD" | "CAD" | "EUR" | "GBP" | "USD";
-  categories?: Array<{
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    _key: string;
-    [internalGroqTypeReferenceTo]?: "category";
-  }>;
-  stock?: number;
+  categories: null;
   minOrder?: number;
-  status?: "best" | "hot" | "new";
-  shoeSizes?: Array<string>;
-  sizes?: Array<string>;
-  taille?: Array<string>;
-  colors?: Array<string>;
   reviews?: Array<{
     name?: string;
     image?: {
@@ -810,7 +802,7 @@ export type PRODUCT_BY_CATEGORY_QUERY_RESULT = Array<{
   likes?: number;
   rating?: number;
   reviewCount?: number;
-  shippingTime?: "economy" | "express" | "global" | "standard";
+  inStock: boolean | null;
 }>;
 
 // Source: sanity\helpers\index.ts
@@ -889,8 +881,6 @@ export type RELATED_PRODUCTS_QUERY_RESULT = Array<{
   _rev: string;
   name?: string;
   slug?: Slug;
-  seoDescription?: string;
-  seoKeywords?: Array<string>;
   vendor: {
     _id: string;
     _type: "vendor";
@@ -941,9 +931,13 @@ export type RELATED_PRODUCTS_QUERY_RESULT = Array<{
     _type: "block";
     _key: string;
   }>;
+  variants?: Array<
+    {
+      _key: string;
+    } & ProductVariant
+  >;
   price?: number;
   discount?: number;
-  originalPrice?: number;
   currency?: "AED" | "AUD" | "CAD" | "EUR" | "GBP" | "USD";
   categories?: Array<{
     _ref: string;
@@ -952,13 +946,7 @@ export type RELATED_PRODUCTS_QUERY_RESULT = Array<{
     _key: string;
     [internalGroqTypeReferenceTo]?: "category";
   }>;
-  stock?: number;
   minOrder?: number;
-  status?: "best" | "hot" | "new";
-  shoeSizes?: Array<string>;
-  sizes?: Array<string>;
-  taille?: Array<string>;
-  colors?: Array<string>;
   reviews?: Array<{
     name?: string;
     image?: {
@@ -987,17 +975,16 @@ export type RELATED_PRODUCTS_QUERY_RESULT = Array<{
   likes?: number;
   rating?: number;
   reviewCount?: number;
-  shippingTime?: "economy" | "express" | "global" | "standard";
 }>;
 
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    '\n    *[_type == "product"] | order(name asc) {\n      ...,\n      vendor->{\n        _id,\n          _type,\n        name,\n        image\n      }\n    }\n  ': PRODUCTS_QUERY_RESULT;
+    '\n    *[_type == "product"] | order(name asc) {\n      ...,\n      vendor->{\n        _id,\n          _type,\n        name,\n        image\n      },\n      categories->{\n      _id,\n      title,\n      },\n       variants[]{\n        _key,\n        price,\n        stock,\n        options\n      },\n      "inStock": count(variants[stock > 0]) > 0,\n    }\n  ': PRODUCTS_QUERY_RESULT;
     '*[_type == "product" && name match $searchParam] | order(name asc)': PRODUCT_SEARCH_QUERY_RESULT;
-    '*[_type == "product" && slug.current == $slug] | order(name asc) [0]\n    {\n      ...,\n      vendor->{\n  _id,\n  _type,\n  _createdAt,\n  _updatedAt,\n  _rev,\n  name,\n  image,\n  rating\n}\n    }': PRODUCT_BY_ID_QUERY_RESULT;
-    "*[_type == 'product' && references(*[_type == \"category\" && slug.current == $categorySlug]._id)] | order(name asc)\n    {\n      ...,\n      vendor->{\n        _id,\n          _type,\n        name,\n        image\n      }\n    }": PRODUCT_BY_CATEGORY_QUERY_RESULT;
+    '*[_type == "product" && slug.current == $slug] | order(name asc) [0]\n    {\n      ...,\n      vendor->{\n  _id,\n  _type,\n  _createdAt,\n  _updatedAt,\n  _rev,\n  name,\n  image,\n  rating\n},\ncategories->{\n      _id,\n      title,\n      },\n variants[]{\n        _key,\n        price,\n        stock,\n        options\n      },\n      "inStock": count(variants[stock > 0]) > 0,\n    }': PRODUCT_BY_ID_QUERY_RESULT;
+    '*[_type == \'product\' && references(*[_type == "category" && slug.current == $categorySlug]._id)] | order(name asc)\n    {\n      ...,\n      vendor->{\n        _id,\n          _type,\n        name,\n        image\n      },\n      categories->{\n      _id,\n      title,\n      },\n      variants[]{\n        _key,\n        price,\n        stock,\n        options\n      },\n      "inStock": count(variants[stock > 0]) > 0,\n    }': PRODUCT_BY_CATEGORY_QUERY_RESULT;
     '\n    *[_type == "order" && clerkUserId == $userId] | order(orderDate desc) {\n      _id,\n      orderNumber,\n      stripeCheckoutSessionId,\n      stripeCustomerId,\n      clerkUserId,\n      customerName,\n      email,\n      totalPrice,\n      currency,\n      status,\n      orderDate,\n      shippingAddress {\n        name,\n        line1,\n        line2,\n        city,\n        state,\n        postal_code,\n        country,\n        phone\n      },\n      shippingMethod,\n      shippingCost,\n      amountDiscount,\n      products[] {\n        _key,\n        quantity,\n        selectedSize,\n        selectedColor,\n        selectedShoesSize,\n        unitPrice,\n        price,\n        product->{\n          _id,\n          name,\n          images,\n          price,\n          currency,\n          slug\n        }\n      },\n      invoice {\n        id,\n        number,\n        hosted_invoice_url\n      }\n    }\n  ': MY_ORDERS_QUERY_RESULT;
     '\n    *[_type == "product" && references($categoryId) && _id != $currentProductId] | order(name asc)[0...5] {\n      ...,\n      vendor->{\n        _id,\n          _type,\n        name,\n        image\n  }}\n  ': RELATED_PRODUCTS_QUERY_RESULT;
   }

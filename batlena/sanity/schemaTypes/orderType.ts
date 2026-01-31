@@ -76,32 +76,46 @@ export const orderType = defineType({
               title: "Quantity Purchased",
               type: "number",
             }),
-               // ✅ ADD THESE FIELDS TO STORE COLOR AND SIZE
-        defineField({
-          name: "selectedSize",
-          title: "Selected Size",
-          type: "string",
-        }),
-        defineField({
-          name: "selectedColor",
-          title: "Selected Color",
-          type: "string",
-        }),
-        defineField({
-          name: "selectedShoesSize",
-          title: "Selected Shoes Size",
-          type: "string",
-        }),
-        defineField({
-          name: "unitPrice",
-          title: "Unit Price at Purchase",
-          type: "number",
-        }),
-        defineField({
-          name: "price",
-          title: "Total Price for Quantity",
-          type: "number",
-        }),
+
+            defineField({
+              name: "options",
+              title: "Selected Options",
+              type: "array",
+              of: [
+                defineArrayMember({
+                  type: "object",
+                  fields: [
+                    defineField({
+                      name: "key",
+                      title: "Option Name",
+                      type: "string",
+                      validation: (Rule) => Rule.required(),
+                    }),
+                    defineField({
+                      name: "value",
+                      title: "Option Value",
+                      type: "string",
+                      validation: (Rule) => Rule.required(),
+                    }),
+                  ],
+                }),
+              ],
+              description: "Stores all selected variant options dynamically",
+            }),
+
+
+
+
+            defineField({
+              name: "unitPrice",
+              title: "Unit Price at Purchase",
+              type: "number",
+            }),
+            defineField({
+              name: "price",
+              title: "Total Price for Quantity",
+              type: "number",
+            }),
           ],
           preview: {
             select: {
@@ -175,7 +189,7 @@ export const orderType = defineType({
       type: "datetime",
       validation: (Rule) => Rule.required(),
     }),
-     // Add shipping address fields
+    // Add shipping address fields
     defineField({
       name: "shippingAddress",
       title: "Shipping Address",
@@ -223,13 +237,13 @@ export const orderType = defineType({
         }),
       ],
     }),
-    
+
     defineField({
       name: "shippingMethod",
       title: "Shipping Method",
       type: "string",
     }),
-    
+
     defineField({
       name: "shippingCost",
       title: "Shipping Cost",
@@ -244,6 +258,8 @@ export const orderType = defineType({
       orderId: "orderNumber",
       email: "email",
     },
+
+    
     prepare(select) {
       const orderIdSnippet = `${select.orderId.slice(0, 5)}...${select.orderId.slice(-5)}`;
       return {
@@ -252,5 +268,7 @@ export const orderType = defineType({
         media: BasketIcon,
       };
     },
+
+
   },
 });

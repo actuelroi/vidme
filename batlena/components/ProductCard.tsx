@@ -15,7 +15,7 @@ import { useRouter } from 'next/navigation'
 import { urlFor } from "@/sanity/lib/image";
 import Link from 'next/link'
 import { PRODUCTS_QUERY_RESULT } from '@/sanity.types'
-import { countOptions, getDiscountLabel } from '@/utils/productOptions'
+import { countAllVariantOptions, getDiscountLabel } from '@/utils/productOptions'
 
 
 type ProductFromQuery = PRODUCTS_QUERY_RESULT[number]
@@ -35,8 +35,7 @@ const ProductCard = ({ product }: Props) => {
   if (!product) return null
 
 
-  const colorCount = countOptions(product.colors)
-  const sizeCount = countOptions(product.sizes)
+ const optionCounts = countAllVariantOptions(product.variants)
 
   const discountLabel = getDiscountLabel(product.discount)
 
@@ -66,10 +65,11 @@ const ProductCard = ({ product }: Props) => {
       {/* Content */}
       <div className="p-4 group-hover:scale-105 cursor-pointer">
         <p className="text-sm text-gray-500">
-          {colorCount > 0 && `${colorCount} colors`}
-          {colorCount > 0 && sizeCount > 0 && ", "}
-          {sizeCount > 0 && `${sizeCount} sizes`}
-        </p>
+  {Object.entries(optionCounts)
+    .map(([key, count]) => `${count} ${key}${count > 1 ? "s" : ""}`)
+    .join(", ")}
+</p>
+
 
         <h3 className="mt-1 text-base font-semibold leading-snug truncate">
           {product?.name}

@@ -1,17 +1,20 @@
 "use client"
 
 import { createCheckoutSession, Metadata } from '@/actions/createCheckoutSession';
+import QuantityButtons from '@/components/details/QuantityButtons';
 import FormattedPrice from '@/components/FormattedPrice';
 import Loading from '@/components/Loading';
 import EmptyCart from '@/components/product/EmptyCart'
 import NoAccessToCart from '@/components/product/NoAccessToCart'
 import PriceFormatter from '@/components/product/PriceFormatter';
-import QuantityButtons from '@/components/product/QuantityButtons';
+
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { urlFor } from '@/sanity/lib/image';
-import useCartStore from '@/store';
+import useCartStore from '@/store/cartStore';
+import { AiOutlineLike } from "react-icons/ai";
+
 import { useAuth, useUser } from '@clerk/nextjs';
 import { Heart, ShoppingBag, Trash } from 'lucide-react';
 import Image from 'next/image';
@@ -22,7 +25,7 @@ import toast from 'react-hot-toast';
 
 const page = () => {
 
-    const { deleteCartProduct, getTotalPrice, resetCart, getGroupedItems } = useCartStore();
+    const {  resetCart, getGroupedItems, getTotalPrice,deleteCartProduct} = useCartStore();
     const [isClient, setIsClient] = useState(false);
     const [loading, setLoading] = useState(false);
     const groupedItems = getGroupedItems();
@@ -77,10 +80,11 @@ const page = () => {
 
 
 
-    const handleDeleteProduct = (id: string, selectedSize?: string, selectedColor?: string,selectedTaille?:string, selectedShoesSize?: string) => {
-        deleteCartProduct(id, selectedSize, selectedColor, selectedShoesSize,selectedTaille);
+    const handleDeleteProduct = (productId: string, variantKey: string, options: Record<string, string>) => {
+        deleteCartProduct(productId, variantKey,options);
         toast.success("Produit supprimé avec succès !");
     };
+
 
 
     const handleToggleFavorite = async (productId: string) => {
@@ -132,7 +136,7 @@ const page = () => {
                                 <div className="grid lg:grid-cols-3 md:gap-8">
                                     <div className="lg:col-span-2 rounded-lg">
                                         <div className="border bg-white rounded-md">
-                                            {groupedItems?.map(({ product, selectedSize, selectedColor,selectedTaille, selectedShoesSize, quantity }, i) =>
+                                            {groupedItems?.map(({ product, options, variantKey, quantity }, i) =>
                                                 <div
                                                     key={i}
                                                     className="border-b p-2.5 last:border-b-0 flex items-center justify-between gap-5"
@@ -158,47 +162,27 @@ const page = () => {
                                                                 <p className="text-sm text-lightColor font-medium">
                                                                     {product?.intro}
                                                                 </p>
-                                                                {selectedSize && (
-                                                                    <p className="text-sm capitalize">
-                                                                        Taille:{" "}
-                                                                        <span className="font-semibold">
-                                                                            {selectedSize.toUpperCase()}
-                                                                        </span>
-                                                                    </p>
+                                                                {options && Object.entries(options).length > 0 && (
+                                                                    <div className="space-y-0.5">
+                                                                        {Object.entries(options).map(([key, value]) => (
+                                                                            <p key={key} className="text-sm capitalize">
+                                                                                {key}:{" "}
+                                                                                <span className="font-semibold">
+                                                                                    {value}
+                                                                                </span>
+                                                                            </p>
+                                                                        ))}
+                                                                    </div>
                                                                 )}
-                                                                {selectedShoesSize && (
-                                                                    <p className="text-sm capitalize">
-                                                                        Taille:{" "}
-                                                                        <span className="font-semibold">
-                                                                            {selectedShoesSize.toUpperCase()}
-                                                                        </span>
-                                                                    </p>
-                                                                )}
-                                                                {selectedColor && (
-                                                                    <p className="text-sm capitalize">
-                                                                        Couleur:{" "}
-                                                                        <span className="font-semibold">
-                                                                            {selectedColor.charAt(0).toUpperCase() + selectedColor.slice(1)}
-                                                                        </span>
-                                                                    </p>
-                                                                )}
-
-                                                                {selectedTaille && (
-                                                                    <p className="text-sm capitalize">
-                                                                        Taille:{" "}
-                                                                        <span className="font-semibold">
-                                                                            {selectedTaille.charAt(0).toUpperCase() + selectedTaille.slice(1)}
-                                                                        </span>
-                                                                    </p>
-                                                                )}
-                                                                <p className="text-sm capitalize">
-                                                                    Status:{" "}
+                                                                <p className="text-sm capitalize flex flex-row gap-3 items-center">
+                                                                    Likes:{" "}
                                                                     <span className="font-semibold">
-                                                                        {product?.status}
+                                                                        {product?.likes}
                                                                     </span>
+                                                                    <AiOutlineLike className='text-blue-400' size={18} />
                                                                 </p>
                                                             </div>
-                                                            <div className="flex items-center gap-2">
+                                                            <div className="flex items-center gap-5">
                                                                 <TooltipProvider>
                                                                     <Tooltip>
                                                                         <TooltipTrigger asChild>
@@ -226,9 +210,8 @@ const page = () => {
                                                                                     onClick={() =>
                                                                                         handleDeleteProduct(
                                                                                             product._id,
-                                                                                            selectedSize,
-                                                                                            selectedColor,
-                                                                                            selectedShoesSize
+                                                                                            variantKey,
+                                                                                            options
                                                                                         )
                                                                                     }
                                                                                     className="w-4 h-4 md:w-5 md:h-5 mr-1 text-gray-500 hover:text-red-600 hoverEffect"
@@ -251,9 +234,8 @@ const page = () => {
                                                         />
                                                         <QuantityButtons
                                                             product={product}
-                                                            selectedSize={selectedSize}
-                                                            selectedColor={selectedColor}
-                                                            selectedShoesSize={selectedShoesSize}
+                                                            variantKey={variantKey}
+                                                            selectedOptions={options}
                                                         />
                                                     </div>
 

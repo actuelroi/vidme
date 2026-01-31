@@ -24,24 +24,7 @@ export const productType = defineType({
             },
             validation: (Rule) => Rule.required(),
         }),
-        defineField({
-            name: "seoDescription",
-            title: "SEO Description",
-            type: "text",
-            rows: 3,
-            validation: (Rule) => Rule.max(160),
-            description: "Meta description for SEO (max 160 characters)"
-        }),
-        defineField({
-            name: "seoKeywords",
-            title: "SEO Keywords",
-            type: "array",
-            of: [{ type: "string" }],
-            options: {
-                layout: "tags"
-            },
-            description: "Keywords for search engine optimization"
-        }),
+        
 
         defineField({
             name: "vendor",
@@ -76,6 +59,7 @@ export const productType = defineType({
             title: "Product Intro",
             type: "string",
         }),
+        
         defineField({
             name: "description",
             title: "Full Description",
@@ -99,24 +83,28 @@ export const productType = defineType({
             ],
             description: "Detailed product description for SEO and user engagement"
         }),
-        defineField({
-            name: "price",
-            title: "Price",
-            type: "number",
-            validation: (Rule) => Rule.required().min(0),
-        }),
+        // ⭐ THE IMPORTANT PART
+    defineField({
+      name: "variants",
+      title: "Product Variants",
+      type: "array",
+      of: [{ type: "productVariant" }],
+      validation: Rule => Rule.min(1).required(),
+    }),
+       defineField({
+      name: "price",
+      title: "Price",
+      type: "number",
+      validation: Rule => Rule.required().min(0),
+    }),
+
         defineField({
             name: "discount",
             title: "Discount",
             type: "number",
             validation: (Rule) => Rule.required().min(0),
         }),
-        defineField({
-            name: "originalPrice",
-            title: "Original Price",
-            type: "number",
-            description: "Original price for showing discount"
-        }),
+        
         defineField({
             name: "currency",
             title: "Currency",
@@ -139,12 +127,7 @@ export const productType = defineType({
             type: "array",
             of: [{ type: "reference", to: { type: "category" } }],
         }),
-        defineField({
-            name: "stock",
-            title: "Stock",
-            type: "number",
-            validation: (Rule) => Rule.min(0),
-        }),
+       
         defineField({
             name: "minOrder",
             title: "Minimum Order Quantity",
@@ -154,119 +137,7 @@ export const productType = defineType({
             description: "Minimum number of units a customer can order (e.g., 8)"
         }),
 
-        defineField({
-            name: "status",
-            title: "Product Status",
-            type: "string",
-            options: {
-                list: [
-                    { title: "Best seller", value: "best" },
-                    { title: "Tendance", value: "hot" },
-                    { title: "Nouveaute", value: "new" },
-                ],
-            },
-        }),
-        // ✅ ADD SHOE SIZE FIELD
-        defineField({
-            name: "shoeSizes",
-            title: "Shoe Sizes",
-            type: "array",
-            of: [{ type: "string" }],
-            options: {
-                list: [
-                    // EU Sizes
-                    { title: "EU 36", value: "eu-36" },
-                    { title: "EU 36.5", value: "eu-36.5" },
-                    { title: "EU 37", value: "eu-37" },
-                    { title: "EU 38", value: "eu-38" },
-                    { title: "EU 38.5", value: "eu-38.5" },
-                    { title: "EU 39", value: "eu-39" },
-                    { title: "EU 40", value: "eu-40" },
-                    { title: "EU 40.5", value: "eu-40.5" },
-                    { title: "EU 41", value: "eu-41" },
-                    { title: "EU 42", value: "eu-42" },
-                    { title: "EU 42.5", value: "eu-42.5" },
-                    { title: "EU 43", value: "eu-43" },
-                    { title: "EU 44", value: "eu-44" },
-                    { title: "EU 45", value: "eu-45" },
-                    { title: "EU 46", value: "eu-46" },
-                    { title: "EU 47", value: "eu-47" },
-                ],
-            },
-            description: "Select available shoe sizes for this product"
-        }),
-
-        // ✅ REGULAR CLOTHING SIZES FIELD
-        defineField({
-            name: "sizes",
-            title: "Available Sizes (Clothing)",
-            type: "array",
-            of: [{ type: "string" }],
-            options: {
-                list: [
-                    // Extended size ranges for global markets
-                    { title: "XXS", value: "xxs" },
-                    { title: "XS", value: "xs" },
-                    { title: "S", value: "s" },
-                    { title: "M", value: "m" },
-                    { title: "L", value: "l" },
-                    { title: "XL", value: "xl" },
-                    { title: "XXL", value: "xxl" },
-                    { title: "3XL", value: "3xl" },
-                    { title: "4XL", value: "4xl" },
-                    { title: "5XL", value: "5xl" },
-                ],
-            },
-        }),
-
-
-
-        defineField({
-            name: "taille",
-            title: "Available Taille (Ring)",
-            type: "array",
-            of: [{ type: "string" }],
-            options: {
-                list: [
-                    // Extended size ranges for global markets
-                    { title: "6", value: "6" },
-                    { title: "7", value: "7" },
-                    { title: "8", value: "8" },
-                    { title: "9", value: "9" },
-                    { title: "10", value: "10" },
-                    
-                ],
-            },
-        }),
-        // ✅ ADD COLOR FIELD
-        defineField({
-            name: "colors",
-            title: "Available Colors",
-            type: "array",
-            of: [{ type: "string" }],
-            options: {
-                list: [
-                    { title: "Black", value: "black" },
-                    { title: "Or", value: "or" },
-                    { title: "Or-rose", value: "or-rose" },
-                    { title: "Argent", value: "argent" },
-                    { title: "White", value: "white" },
-                    { title: "Red", value: "red" },
-                    { title: "Blue", value: "blue" },
-                    { title: "Green", value: "green" },
-                    { title: "Yellow", value: "yellow" },
-                    { title: "Pink", value: "pink" },
-                    { title: "Purple", value: "purple" },
-                    { title: "Orange", value: "orange" },
-                    { title: "Gray", value: "gray" },
-                    { title: "Brown", value: "brown" },
-                    { title: "Navy", value: "navy" },
-                    { title: "Beige", value: "beige" },
-                    { title: "Maroon", value: "maroon" },
-                    { title: "Teal", value: "teal" },
-                ],
-            },
-        }),
+        
         defineField({
             name: "reviews",
             title: "Customer Reviews",
@@ -366,19 +237,7 @@ export const productType = defineType({
             initialValue: 0
         }),
 
-        defineField({
-            name: "shippingTime",
-            title: "Shipping Time",
-            type: "string",
-            options: {
-                list: [
-                    { title: "Express 1-3 days", value: "express" },
-                    { title: "Standard 3-7 days", value: "standard" },
-                    { title: "Economy 7-14 days", value: "economy" },
-                    { title: "Global 10-21 days", value: "global" },
-                ]
-            }
-        }),
+        
     ],
     preview: {
         select: {
