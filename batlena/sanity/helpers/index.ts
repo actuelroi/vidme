@@ -126,17 +126,7 @@ export const getProductsByCategory = async (categorySlug: string) => {
         name,
         image
       },
-      categories->{
-      _id,
-      title,
-      },
-      variants[]{
-        _key,
-        price,
-        stock,
-        options
-      },
-      "inStock": count(variants[stock > 0]) > 0,
+      
     }`
   );
   try {
