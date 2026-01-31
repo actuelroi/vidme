@@ -1,5 +1,5 @@
 
-import useCartStore from "@/store";
+
 
 interface FormattedPriceProps {
   amount: number;
