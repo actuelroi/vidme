@@ -1,6 +1,6 @@
 export default function SaleHero() {
   return (
-    <div className="relative w-full h-[400px] overflow-hidden bg-gray-100">
+    <div className="relative w-full h-[400px] overflow-hidden bg-gray-100" id="sale-hero">
       <img
         src="/hero.png"
         alt="Fashion model wearing white top"

@@ -17,6 +17,7 @@ import Link from 'next/link'
 import { PRODUCTS_QUERY_RESULT } from '@/sanity.types'
 import { countAllVariantOptions, getDiscountLabel } from '@/utils/productOptions'
 import {  convertSanityOptionsToArray } from '@/utils/variantOptions'
+import { useEffect } from 'react'
 
 
 type ProductFromQuery = PRODUCTS_QUERY_RESULT[number]
@@ -47,6 +48,14 @@ const optionCounts = countAllVariantOptions(
 
   const discountLabel = getDiscountLabel(product.discount)
 
+
+  useEffect(() => {
+    const hero = document.getElementById('sale-hero')
+    if (hero) {
+      const height = hero.offsetHeight
+      window.scrollTo({ top: height, behavior: 'smooth' })
+    }
+  }, [])
 
   return (
     <div className="w-65 rounded-xl border bg-white shadow-sm overflow-hidden group mx-3" role='button' onClick={() => router.push(`/product/${product?.slug?.current}`)}>

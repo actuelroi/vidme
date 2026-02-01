@@ -1,6 +1,6 @@
 import React from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
-import {Table,TableBody,TableCell,TableHead,TableHeader,TableRow,} from "../ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "../ui/table";
 import PriceFormatter from "./PriceFormatter";
 
 import Image from "next/image";
@@ -29,52 +29,63 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-scroll bg-white">
         <DialogHeader>
-          <DialogTitle>Order Details - {order.orderNumber}</DialogTitle>
+          <DialogTitle>Détails de la commande – {order.orderNumber}</DialogTitle>
         </DialogHeader>
+
         <div className="mt-4">
           <p>
-            <strong>Customer:</strong> {order.customerName}
+            <strong>Client :</strong> {order.customerName}
           </p>
           <p>
-            <strong>Email:</strong> {order.email}
+            <strong>Email :</strong> {order.email}
           </p>
           <p>
-            <strong>Date:</strong>{" "}
+            <strong>Date :</strong>{" "}
             {order.orderDate && new Date(order.orderDate).toLocaleDateString()}
           </p>
 
           <p>
-            <strong>Address:</strong>{" "}
-            {order.shippingAddress?.country}, {order.shippingAddress?.postal_code},{order.shippingAddress?.city},{order.shippingAddress?.line1}
+            <strong>Adresse :</strong>{" "}
+            {order.shippingAddress?.country},{" "}
+            {order.shippingAddress?.postal_code},{" "}
+            {order.shippingAddress?.city},{" "}
+            {order.shippingAddress?.line1}
           </p>
-          
+
           <p>
-            <strong>Status:</strong>{" "}
+            <strong>Statut :</strong>{" "}
             <span className="capitalize text-green-600 font-medium">
               {order.status}
             </span>
           </p>
+
           <p>
-            <strong>Invoice Number:</strong> {order?.invoice?.number}
+            <strong>Numéro de facture :</strong> {order?.invoice?.number}
           </p>
+
           {order?.invoice && (
-            <Button className="bg-transparent border text-darkColor/80 mt-2 hover:text-darkColor hover:border-darkColor hover:bg-darkColor/10 hoverEffect ">
+            <Button className="bg-transparent border text-darkColor/80 mt-2 hover:text-darkColor hover:border-darkColor hover:bg-darkColor/10 hoverEffect">
               {order?.invoice?.hosted_invoice_url && (
-                <Link href={order?.invoice?.hosted_invoice_url} target="_blank">
-                  Download Invoice
+                <Link
+                  href={order?.invoice?.hosted_invoice_url}
+                  target="_blank"
+                >
+                  Télécharger la facture
                 </Link>
               )}
             </Button>
           )}
         </div>
+
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Product</TableHead>
-              <TableHead>Quantity</TableHead>
-              <TableHead>Price</TableHead>
+              <TableHead>Produit</TableHead>
+              <TableHead>Quantité</TableHead>
+              <TableHead>Prix</TableHead>
             </TableRow>
           </TableHeader>
+
           <TableBody>
             {order.products?.map((product, index) => (
               <TableRow key={index}>
@@ -82,16 +93,17 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
                   {product?.product?.images && (
                     <Image
                       src={urlFor(product?.product?.images[0]).url()}
-                      alt="productImage"
+                      alt="imageProduit"
                       width={50}
                       height={50}
                       className="border rounded-sm"
                     />
                   )}
-
                   {product?.product && product?.product?.name}
                 </TableCell>
+
                 <TableCell>{product?.quantity}</TableCell>
+
                 <TableCell>
                   <PriceFormatter
                     amount={product?.product?.price}
@@ -107,16 +119,17 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
           <div className="w-44 flex flex-col gap-1">
             {order?.amountDiscount !== 0 && (
               <div className="w-full flex items-center justify-between">
-                <strong>Discount: </strong>
+                <strong>Remise :</strong>
                 <PriceFormatter
                   amount={order?.amountDiscount}
                   className="text-black font-bold"
                 />
               </div>
             )}
+
             {order?.amountDiscount !== 0 && (
               <div className="w-full flex items-center justify-between">
-                <strong>Subtotal: </strong>
+                <strong>Sous-total :</strong>
                 <PriceFormatter
                   amount={
                     (order?.totalPrice as number) +
@@ -126,17 +139,19 @@ const OrderDetailsDialog: React.FC<OrderDetailsDialogProps> = ({
                 />
               </div>
             )}
+
             <div className="w-full flex items-center justify-between">
-              <strong>Total: </strong>
+              <strong>Total :</strong>
               <FormattedPrice
-                      amount={order?.totalPrice ? order?.totalPrice : 0}
-                      className="text-black font-medium"
-                    />
+                amount={order?.totalPrice ? order?.totalPrice : 0}
+                className="text-black font-medium"
+              />
             </div>
           </div>
         </div>
       </DialogContent>
     </Dialog>
+
   );
 };
 
