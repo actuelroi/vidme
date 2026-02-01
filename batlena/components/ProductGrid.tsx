@@ -1,31 +1,27 @@
-
-
-import { Suspense } from 'react'
+import { PRODUCTS_QUERY_RESULT } from '@/sanity.types'
 import ProductCard from './ProductCard'
 import { getAllProducts } from '@/sanity/helpers'
-import Loading from './Loading'
-
-
 
 
 const ProductGrid = async () => {
-   const data = await getAllProducts()
-  return (
+  let data : PRODUCTS_QUERY_RESULT = []
 
-     <Suspense fallback={<Loading/>}>
-    
-    <div className='grid grid-cols-1 sm:grid-cols-2 p-4 items-center m-3 gap-2 space-x-3 md:grid-cols-5 md:p-4 md:gap-4'>
-    {
-      data?.length > 0  && (
-        data.map((product)=>(
-           <ProductCard key={product._id}
-           product={product}
-           />
-        ))
-      )
-    }
+  try {
+    data = await getAllProducts()
+  } catch (error) {
+    console.error('Failed to fetch products:', error)
+  }
+
+  if (!data || data.length === 0) {
+    return <p className="p-4 text-center text-gray-500">No products found.</p>
+  }
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 p-4 gap-4">
+      {data.map(product => (
+        <ProductCard key={product._id} product={product} />
+      ))}
     </div>
-    </Suspense>
   )
 }
 
