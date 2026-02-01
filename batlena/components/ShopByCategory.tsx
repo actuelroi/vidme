@@ -53,8 +53,9 @@ export const ShopByCategory: React.FC = () => {
 
   return (
     <section className="w-full p-6">
-      <h2 className="text-xl font-bold">Shop by category</h2>
-      <p className="text-gray-500 mb-6">Let's help you find something</p>
+      <h2 className="text-xl font-bold">Achetez par catégorie</h2>
+      <p className="text-gray-500 mb-6">Nous allons vous aider à trouver quelque chose</p>
+
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-8">
         {categories.map((category) => (
