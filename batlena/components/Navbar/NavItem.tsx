@@ -37,7 +37,7 @@ const NavItem = ({data}:Props) => {
 
                         </div>
 
-                        <Link href={'/more'} className="flex items-center gap-1 text-gray-600 dark:text-gray-300 hover:font-bold  font-medium">
+                        <Link href={'/'} className="flex items-center gap-1 text-gray-600 dark:text-gray-300 hover:font-bold  font-medium">
                             <span>Plus</span>
                             <ChevronDown className="w-4 h-4" />
                         </Link>
