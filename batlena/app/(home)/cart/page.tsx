@@ -36,6 +36,15 @@ const page = () => {
         setIsClient(true);
     }, []);
 
+
+     useEffect(() => {
+     const hero = document.getElementById('sale-hero')
+     if (hero) {
+       const height = hero.offsetHeight
+       window.scrollTo({ top: height, behavior: 'smooth' })
+     }
+   }, [])
+
     if (!isClient) {
         return <Loading />;
     }
@@ -120,6 +129,8 @@ const page = () => {
 
 
     const totalPrice = getTotalPrice();
+
+    
 
     return (
         <Suspense fallback={<Loading />}>

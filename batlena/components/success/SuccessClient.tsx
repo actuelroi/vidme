@@ -43,6 +43,14 @@ const SuccessClient = () => {
     setHydrated(true);
   }, []);
 
+   useEffect(() => {
+     const hero = document.getElementById('sale-hero')
+     if (hero) {
+       const height = hero.offsetHeight
+       window.scrollTo({ top: height, behavior: 'smooth' })
+     }
+   }, [])
+
   // Fetch user's orders
   useEffect(() => {
     if (!isLoaded || !isSignedIn || !userId) return;
