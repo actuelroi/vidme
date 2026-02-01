@@ -49,77 +49,70 @@ const ProductCard = ({ product }: Props) => {
   }, [])
 
   return (
-    <div
-      className="w-65 rounded-xl border bg-white shadow-sm overflow-hidden group cursor-pointer"
-      role="button"
-      onClick={() => router.push(`/product/${product?.slug?.current || ''}`)}
-    >
-      {/* Image */}
-      <div className="relative h-45 bg-gray-100 group-hover:scale-105 transition-transform">
-        {discountLabel && (
-          <span className="absolute top-2 left-2 z-10 rounded-full bg-orange-600 px-3 py-1 text-xs font-semibold text-white">
-            {discountLabel}
-          </span>
-        )}
+   <div
+  className="flex h-full flex-col rounded-xl border bg-white shadow-sm overflow-hidden cursor-pointer"
+  onClick={() => router.push(`/product/${product.slug?.current}`)}
+>
+  {/* Image */}
+  <div className="relative aspect-3/4 bg-gray-100">
+    {discountLabel && (
+      <span className="absolute top-2 left-2 z-10 rounded-full bg-orange-600 px-3 py-1 text-xs font-semibold text-white">
+        {discountLabel}
+      </span>
+    )}
 
-        {product?.images?.[0] ? (
-          <Link href={`/product/${product.slug?.current}`}>
-            <Image
-              src={urlFor(product.images[0]).url()}
-              alt={product.images[0].alt || 'Product Image'}
-              fill
-              className="object-contain"
-            />
-          </Link>
-        ) : (
-          <div className="flex items-center justify-center h-full text-gray-400">
-            No Image
-          </div>
-        )}
-      </div>
+    {product.images?.[0] && (
+      <Image
+        src={urlFor(product.images[0]).url()}
+        alt={product.images[0].alt || 'Image'}
+        fill
+        className="object-contain"
+      />
+    )}
+  </div>
 
-      {/* Content */}
-      <div className="p-4 group-hover:scale-105 transition-transform">
-        {/* Options */}
-        {Object.keys(optionCounts).length > 0 && (
-          <p className="text-sm text-gray-500">
-            {Object.entries(optionCounts)
-              .map(([key, count]) => `${count} ${key}${count > 1 ? "s" : ""}`)
-              .join(", ")}
-          </p>
-        )}
+  {/* Content */}
+  <div className="flex flex-col flex-1 p-4">
+    <p className="text-sm text-gray-500">
+      {Object.entries(optionCounts)
+        .map(([key, count]) => `${count} ${key}${count > 1 ? "s" : ""}`)
+        .join(", ")}
+    </p>
 
-        {/* Name */}
-        <h3 className="mt-1 text-base font-semibold truncate">{product.name}</h3>
+    <h3 className="mt-1 text-base font-semibold line-clamp-2">
+      {product.name}
+    </h3>
 
-        {/* Rating */}
-        <div className="mt-2 flex items-center gap-1">
-          {[...Array(4)].map((_, i) => (
-            <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-          ))}
-          <Star className="h-4 w-4 text-gray-300" />
-          <span className="ml-1 text-sm text-gray-500">{product.reviewCount ?? 0}</span>
-        </div>
-
-        {/* Price + Vendor */}
-        <div className="flex justify-between mt-2 items-center">
-          <h1 className="text-lg font-bold">€{product.price ?? 'N/A'}</h1>
-          <AvatarGroup className="grayscale flex items-center gap-2">
-            <Avatar>
-              {product.vendor?.image ? (
-                <AvatarImage
-                  src={urlFor(product.vendor.image).width(40).height(40).url()}
-                  alt={product.vendor.name || 'Vendor Image'}
-                />
-              ) : (
-                <AvatarFallback>{product.vendor?.name?.charAt(0) ?? '?'}</AvatarFallback>
-              )}
-            </Avatar>
-            <AvatarGroupCount>+3</AvatarGroupCount>
-          </AvatarGroup>
-        </div>
-      </div>
+    {/* Rating */}
+    <div className="mt-2 flex items-center gap-1">
+      {[...Array(4)].map((_, i) => (
+        <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+      ))}
+      <Star className="h-4 w-4 text-gray-300" />
+      <span className="ml-1 text-sm text-gray-500">
+        {product.reviewCount ?? 0}
+      </span>
     </div>
+
+    {/* Push price to bottom */}
+    <div className="mt-auto flex justify-between items-center pt-3">
+      <h1 className="text-lg font-bold">€{product.price}</h1>
+
+      <Avatar>
+        {product.vendor?.image ? (
+          <AvatarImage
+            src={urlFor(product.vendor.image).width(40).height(40).url()}
+          />
+        ) : (
+          <AvatarFallback>
+            {product.vendor?.name?.charAt(0)}
+          </AvatarFallback>
+        )}
+      </Avatar>
+    </div>
+  </div>
+</div>
+
   )
 }
 
