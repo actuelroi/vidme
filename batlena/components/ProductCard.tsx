@@ -1,7 +1,8 @@
+
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
+
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
@@ -98,17 +99,19 @@ const ProductCard = ({ product }: Props) => {
     <div className="mt-auto flex justify-between items-center pt-3">
       <h1 className="text-lg font-bold">€{product.price}</h1>
 
-      <Avatar>
-        {product.vendor?.image ? (
-          <AvatarImage
-            src={urlFor(product.vendor.image).width(40).height(40).url()}
-          />
-        ) : (
-          <AvatarFallback>
-            {product.vendor?.name?.charAt(0)}
-          </AvatarFallback>
-        )}
-      </Avatar>
+     <AvatarGroup className="grayscale flex items-center gap-2">
+            <Avatar>
+              {product.vendor?.image ? (
+                <AvatarImage
+                  src={urlFor(product.vendor.image).width(40).height(40).url()}
+                  alt={product.vendor.name || 'Vendor Image'}
+                />
+              ) : (
+                <AvatarFallback>{product.vendor?.name?.charAt(0) ?? '?'}</AvatarFallback>
+              )}
+            </Avatar>
+            <AvatarGroupCount>+3</AvatarGroupCount>
+          </AvatarGroup>
     </div>
   </div>
 </div>
