@@ -21,7 +21,7 @@ const RightSideProduct = ({ product }: Props) => {
   const minQty = product?.minOrder ?? 1;
 
   const [quantity, setQuantity] = useState(minQty);
-   const { addItem,getItemCount } = useCartStore();
+  const { addItem, getItemCount } = useCartStore();
 
 
   const [selectedOptions, setSelectedOptions] = useState<
@@ -54,32 +54,32 @@ const RightSideProduct = ({ product }: Props) => {
 
 
   const selectedVariant = useMemo(() => {
-  return variants.find((variant) => {
-    if (!variant.options) return false;
+    return variants.find((variant) => {
+      if (!variant.options) return false;
 
-    // Check every selected option against the variant's options array
-    return Object.entries(selectedOptions).every(([key, value]) => {
-      if (!value) return true; // skip if no value selected
+      // Check every selected option against the variant's options array
+      return Object.entries(selectedOptions).every(([key, value]) => {
+        if (!value) return true; // skip if no value selected
 
-      // Find the option object in this variant that matches the key
-      const option = variant.options?.find((opt) => opt.name === key);
-      if (!option || !option.values) return false;
+        // Find the option object in this variant that matches the key
+        const option = variant.options?.find((opt) => opt.name === key);
+        if (!option || !option.values) return false;
 
-      // Check if the variant's option values include the selected value
-      return option.values.includes(value);
+        // Check if the variant's option values include the selected value
+        return option.values.includes(value);
+      });
     });
-  });
-}, [variants, selectedOptions]);
+  }, [variants, selectedOptions]);
 
 
-const selectedVariantWithRecord = useMemo(() => {
-  if (!selectedVariant) return null;
+  const selectedVariantWithRecord = useMemo(() => {
+    if (!selectedVariant) return null;
 
-  return {
-    ...selectedVariant,
-    options: optionsArrayToRecord(selectedVariant.options),
-  };
-}, [selectedVariant]);
+    return {
+      ...selectedVariant,
+      options: optionsArrayToRecord(selectedVariant.options),
+    };
+  }, [selectedVariant]);
 
 
 
@@ -120,11 +120,11 @@ const selectedVariantWithRecord = useMemo(() => {
       <div className="flex flex-wrap gap-2">
         {product?.freeShipping && (
           <span className="px-2 py-1 bg-green-100 text-green-700 text-sm rounded">
-            Free shipping
+            Livraison gratuite
           </span>
         )}
         <span className="px-2 py-1 bg-blue-100 text-blue-700 text-sm rounded">
-          30-day return
+         Retour sous 30 jours
         </span>
       </div>
 
@@ -146,7 +146,9 @@ const selectedVariantWithRecord = useMemo(() => {
           <OptionSelector
             label="Quantity"
             options={Array.from(
-              { length: (selectedVariant?.stock ?? 10) - minQty + 1 },
+              {
+                length: Math.min((selectedVariant?.stock ?? 10) - minQty + 1, 20)
+              },
               (_, i) => String(i + minQty)
             )}
             value={[String(quantity)]}
@@ -157,20 +159,20 @@ const selectedVariantWithRecord = useMemo(() => {
               if (product && selectedVariant) {
                 const itemCount = getItemCount(product?._id, selectedVariant._key);
                 addItem(product, selectedVariant._key, selectedOptions, newQty - itemCount);
-
               }
             }}
           />
+
 
         </div>
 
 
 
       </div>
-      {product && selectedVariantWithRecord  && (
+      {product && selectedVariantWithRecord && (
         <AddToCartButton
           product={product} // TS now knows product is NOT null
-          variant={selectedVariantWithRecord } // can still be undefined if no options selected
+          variant={selectedVariantWithRecord} // can still be undefined if no options selected
           selectedOptions={selectedOptions}
           quantity={quantity}
         />
