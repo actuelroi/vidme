@@ -24,6 +24,12 @@ export const productType = defineType({
             },
             validation: (Rule) => Rule.required(),
         }),
+
+         defineField({
+            name: "source",
+            title: "Source Url",
+            type: "string",
+        }),
         
 
         defineField({
